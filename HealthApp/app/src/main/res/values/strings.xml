@@ -15,4 +15,5 @@
     <string name="title_activity_bmi">HealthApp</string>
     <string name="title_activity_meals">HealthApp</string>
     <string name="title_activity_progress">HealthApp</string>
+    <string name="action_overview">Overview</string>
 </resources>

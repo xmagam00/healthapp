@@ -39,6 +39,8 @@ public class ProgressActivity extends ActionBarActivity {
             intent = new Intent(ProgressActivity.this, HelpActivity.class);
         } else if (id == R.id.action_about){
             intent = new Intent(ProgressActivity.this, AboutActivity.class);
+        } else if (id == R.id.action_overview){
+            intent = new Intent(ProgressActivity.this, MainActivity.class);
         }
 
         if (intent != null) {

@@ -1,5 +1,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
     android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
@@ -24,17 +25,16 @@
         android:max="200"
         android:indeterminate="false"
         android:layout_below="@+id/spinner"
-        android:layout_alignEnd="@+id/spinner"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true" />
 
     <Spinner
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/spinner"
-        android:layout_alignTop="@+id/textViewWeight"
-        android:layout_toEndOf="@+id/textViewWeight"
         android:spinnerMode="dropdown"
-        android:layout_alignStart="@+id/textViewHeightDown" />
+        android:layout_alignTop="@+id/textViewWeight"
+        android:layout_alignStart="@+id/spinner2" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -52,8 +52,8 @@
         android:id="@+id/seekBarHeightUp"
         android:max="250"
         android:indeterminate="false"
-        android:layout_below="@+id/textViewHeightUpper2"
-        android:layout_alignEnd="@+id/seekBarWeight"
+        android:layout_centerVertical="true"
+        android:layout_alignEnd="@+id/seekBarHeightBottom"
         android:layout_alignParentStart="true" />
 
     <TextView
@@ -62,8 +62,8 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Centimeters"
         android:id="@+id/textViewHeightUpper2"
-        android:layout_below="@+id/textViewHeight"
-        android:layout_alignEnd="@+id/textViewHeightBottom" />
+        android:layout_above="@+id/seekBarHeightUp"
+        android:layout_centerHorizontal="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -72,7 +72,7 @@
         android:text="Inches"
         android:id="@+id/textViewHeightBottom"
         android:layout_below="@+id/textViewHeightUpper"
-        android:layout_centerHorizontal="true" />
+        android:layout_toEndOf="@+id/textViewHeightUpper" />
 
     <SeekBar
         android:layout_width="wrap_content"
@@ -80,9 +80,9 @@
         android:id="@+id/seekBarHeightBottom"
         android:max="200"
         android:indeterminate="false"
-        android:layout_below="@+id/textViewHeightBottom"
         android:layout_alignStart="@+id/textViewHeight"
-        android:layout_alignEnd="@+id/seekBarHeightUp" />
+        android:layout_below="@+id/textViewHeightBottom"
+        android:layout_alignEnd="@+id/textViewAge" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -90,8 +90,8 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Result:"
         android:id="@+id/textViewResult"
-        android:layout_below="@+id/textViewHeightDown"
-        android:layout_alignEnd="@+id/textViewHeightBottom" />
+        android:layout_above="@+id/textViewResultValue"
+        android:layout_centerHorizontal="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -109,7 +109,7 @@
         android:text="0"
         android:id="@+id/textViewWeightText"
         android:layout_below="@+id/seekBarWeight"
-        android:layout_alignEnd="@+id/textViewHeight" />
+        android:layout_toStartOf="@+id/textViewHeightUpper2" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -126,8 +126,8 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="0"
         android:id="@+id/textViewHeightUpper"
-        android:layout_alignTop="@+id/textView7"
-        android:layout_toEndOf="@+id/textViewHeight" />
+        android:layout_below="@+id/seekBarHeightUp"
+        android:layout_toStartOf="@+id/textViewHeightUpper2" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -145,16 +145,16 @@
         android:text="0"
         android:id="@+id/textViewHeightDown"
         android:layout_alignTop="@+id/textView8"
-        android:layout_toEndOf="@+id/textViewWeight" />
+        android:layout_toStartOf="@+id/textViewHeightBottom" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:id="@+id/textViewResultText"
-        android:layout_marginBottom="26dp"
+        android:layout_marginBottom="23dp"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_toEndOf="@+id/textViewResultValue" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -169,11 +169,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/seekBarAge"
-        android:layout_below="@+id/textView9"
-        android:layout_alignParentStart="true"
-        android:layout_alignEnd="@+id/spinner"
         android:max="120"
-        android:indeterminate="false" />
+        android:indeterminate="false"
+        android:layout_below="@+id/textView9"
+        android:layout_alignEnd="@+id/textViewAge"
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -199,8 +199,8 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="0"
         android:id="@+id/textViewResultValue"
-        android:layout_below="@+id/textViewResult"
-        android:layout_centerHorizontal="true" />
+        android:layout_above="@+id/textView13"
+        android:layout_alignEnd="@+id/textViewHeightUpper2" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -209,7 +209,7 @@
         android:text="BMI Index:"
         android:id="@+id/textView11"
         android:layout_below="@+id/textViewResult"
-        android:layout_toStartOf="@+id/textViewHeightBottom" />
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -217,7 +217,8 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Category:"
         android:id="@+id/textView12"
-        android:layout_below="@+id/textView11"
+        android:layout_alignBaseline="@+id/textViewResultText"
+        android:layout_alignBottom="@+id/textViewResultText"
         android:layout_alignStart="@+id/textView11" />
 
     <TextView
@@ -226,16 +227,24 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="0"
         android:id="@+id/textViewAgeValue"
-        android:layout_below="@+id/seekBarAge"
-        android:layout_toEndOf="@+id/textView10" />
+        android:layout_alignTop="@+id/textView10"
+        android:layout_alignStart="@+id/textViewWeightText" />
 
     <Spinner
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/spinner2"
-        android:layout_alignBottom="@+id/textViewHeight"
-        android:layout_alignEnd="@+id/seekBarWeight"
-        android:layout_alignTop="@+id/textViewHeight"
-        android:layout_toEndOf="@+id/textViewHeightUpper" />
+        android:layout_toEndOf="@+id/textViewHeightUpper2"
+        android:layout_above="@+id/textViewHeightUpper2"
+        android:layout_below="@+id/seekBarWeight"
+        android:spinnerMode="dropdown" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/textView13"
+        android:layout_alignTop="@+id/textViewResultText"
+        android:layout_alignStart="@+id/textViewResultValue" />
 
 </RelativeLayout>

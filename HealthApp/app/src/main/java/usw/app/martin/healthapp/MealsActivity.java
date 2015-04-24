@@ -39,6 +39,8 @@ public class MealsActivity extends ActionBarActivity {
             intent = new Intent(MealsActivity.this, HelpActivity.class);
         } else if (id == R.id.action_about){
             intent = new Intent(MealsActivity.this, AboutActivity.class);
+        } else if (id == R.id.action_overview){
+            intent = new Intent(MealsActivity.this, MainActivity.class);
         }
 
         if (intent != null) {

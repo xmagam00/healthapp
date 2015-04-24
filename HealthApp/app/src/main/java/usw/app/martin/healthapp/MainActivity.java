@@ -41,6 +41,8 @@ public class MainActivity extends ActionBarActivity {
             intent = new Intent(MainActivity.this, HelpActivity.class);
         } else if (id == R.id.action_about){
             intent = new Intent(MainActivity.this, AboutActivity.class);
+        } else if (id == R.id.action_overview){
+            intent = new Intent(MainActivity.this, MainActivity.class);
         }
 
         if (intent != null) {

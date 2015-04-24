@@ -29,7 +29,7 @@ public class SplashScreenActivity extends Activity {
                 int jumpTime = 0;
                 while (jumpTime < totalProgressTime) {
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(10);
                         jumpTime += 5;
                         progressBar.setProgress(jumpTime);
                     } catch (InterruptedException e) {
