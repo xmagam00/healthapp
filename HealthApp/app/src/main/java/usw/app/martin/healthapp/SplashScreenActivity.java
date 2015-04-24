@@ -7,38 +7,44 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.os.Handler;
+import android.widget.ProgressBar;
 
 
 public class SplashScreenActivity extends Activity {
 
+    private ProgressBar progressBar;
 
-    // Splash screen timer
-    private static int SPLASH_TIME_OUT = 3000;
-
+    final int totalProgressTime = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
 
-        new Handler().postDelayed(new Runnable() {
-
-			/*
-			 * Showing splash screen with a timer. This will be useful when you
-			 * want to show case your app logo / company
-			 */
+        progressBar = (ProgressBar)findViewById(R.id.progressBar);
+        final Thread t = new Thread() {
 
             @Override
             public void run() {
-                // This method will be executed once the timer is over
-                // Start your app main activity
+                int jumpTime = 0;
+                while (jumpTime < totalProgressTime) {
+                    try {
+                        Thread.sleep(1000);
+                        jumpTime += 5;
+                        progressBar.setProgress(jumpTime);
+                    } catch (InterruptedException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+
+                }
+
                 Intent i = new Intent(SplashScreenActivity.this, MainActivity.class);
                 startActivity(i);
-
-                // close this activity
                 finish();
             }
-        }, SPLASH_TIME_OUT);
+        };
+        t.start();
     }
 
 

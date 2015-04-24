@@ -47,10 +47,23 @@ public class HelpActivity extends ActionBarActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
+        Intent intent = null;
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.action_bmi) {
+            intent = new Intent(HelpActivity.this, BmiActivity.class);
+        } else if (id == R.id.action_meals){
+            intent = new Intent(HelpActivity.this, MealsActivity.class);
+        } else if (id == R.id.action_progress){
+            intent = new Intent(HelpActivity.this, ProgressActivity.class);
+        } else if (id == R.id.action_help){
+            intent = new Intent(HelpActivity.this, HelpActivity.class);
+        } else if (id == R.id.action_about){
+            intent = new Intent(HelpActivity.this, AboutActivity.class);
+        }
+
+        if (intent != null) {
+            startActivity(intent);
+            finish();
         }
 
         return super.onOptionsItemSelected(item);

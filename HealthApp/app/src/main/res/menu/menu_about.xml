@@ -2,6 +2,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="usw.app.martin.healthapp.AboutActivity">
-    <item android:id="@+id/action_settings" android:title="@string/action_settings"
+    <item android:id="@+id/action_bmi" android:title="@string/action_bmi"
+        android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/action_excercises" android:title="@string/action_excercises"
+        android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/action_meals" android:title="@string/action_meals"
+        android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/action_progress" android:title="@string/action_progress"
+        android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/action_help" android:title="@string/action_help"
+        android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/action_about" android:title="@string/action_about"
         android:orderInCategory="100" app:showAsAction="never" />
 </menu>
