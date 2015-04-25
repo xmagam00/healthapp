@@ -1,4 +1,4 @@
-package usw.app.martin.healthapp;
+package usw.app.martin.healthapp.activity;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -8,6 +8,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+
+import usw.app.martin.healthapp.R;
 
 
 public class HelpActivity extends ActionBarActivity {
@@ -53,9 +55,7 @@ public class HelpActivity extends ActionBarActivity {
             intent = new Intent(HelpActivity.this, BmiActivity.class);
         } else if (id == R.id.action_meals){
             intent = new Intent(HelpActivity.this, MealsActivity.class);
-        } else if (id == R.id.action_progress){
-            intent = new Intent(HelpActivity.this, ProgressActivity.class);
-        } else if (id == R.id.action_help){
+        }  else if (id == R.id.action_help){
             intent = new Intent(HelpActivity.this, HelpActivity.class);
         } else if (id == R.id.action_about){
             intent = new Intent(HelpActivity.this, AboutActivity.class);

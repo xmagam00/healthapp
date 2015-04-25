@@ -1,10 +1,9 @@
-package usw.app.martin.healthapp;
+package usw.app.martin.healthapp.activity;
 
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,9 +12,8 @@ import android.widget.ArrayAdapter;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import org.w3c.dom.Text;
+import usw.app.martin.healthapp.R;
 
 
 public class BmiActivity extends ActionBarActivity {
@@ -55,9 +53,7 @@ public class BmiActivity extends ActionBarActivity {
             intent = new Intent(BmiActivity.this, BmiActivity.class);
         } else if (id == R.id.action_meals){
             intent = new Intent(BmiActivity.this, MealsActivity.class);
-        } else if (id == R.id.action_progress){
-            intent = new Intent(BmiActivity.this, ProgressActivity.class);
-        } else if (id == R.id.action_help){
+        }  else if (id == R.id.action_help){
             intent = new Intent(BmiActivity.this, HelpActivity.class);
         } else if (id == R.id.action_about){
             intent = new Intent(BmiActivity.this, AboutActivity.class);

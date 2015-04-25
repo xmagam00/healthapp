@@ -1,13 +1,13 @@
-package usw.app.martin.healthapp;
+package usw.app.martin.healthapp.activity;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.os.Handler;
 import android.widget.ProgressBar;
+
+import usw.app.martin.healthapp.R;
 
 
 public class SplashScreenActivity extends Activity {

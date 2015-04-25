@@ -1,7 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="usw.app.martin.healthapp.MealsActivity">
+    tools:context="usw.app.martin.healthapp.activity.MealsActivity">
     <item android:id="@+id/action_overview" android:title="@string/action_overview"
         android:orderInCategory="100" app:showAsAction="never" />
     <item android:id="@+id/action_bmi" android:title="@string/action_bmi"
@@ -9,8 +9,6 @@
     <item android:id="@+id/action_excercises" android:title="@string/action_excercises"
         android:orderInCategory="100" app:showAsAction="never" />
     <item android:id="@+id/action_meals" android:title="@string/action_meals"
-        android:orderInCategory="100" app:showAsAction="never" />
-    <item android:id="@+id/action_progress" android:title="@string/action_progress"
         android:orderInCategory="100" app:showAsAction="never" />
     <item android:id="@+id/action_help" android:title="@string/action_help"
         android:orderInCategory="100" app:showAsAction="never" />
