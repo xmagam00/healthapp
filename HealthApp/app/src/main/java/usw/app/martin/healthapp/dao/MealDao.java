@@ -2,6 +2,7 @@ package usw.app.martin.healthapp.dao;
 
 import android.content.Context;
 
+import java.util.HashMap;
 import java.util.List;
 
 import usw.app.martin.healthapp.helper.MySqlLiteHelper;
@@ -19,7 +20,7 @@ public class MealDao {
         helper = new MySqlLiteHelper(context);
     }
 
-    public List<MealModel> getAllMeals(){
+    public HashMap<String,List<MealModel>> getAllMeals(){
         return helper.getAllMeals();
     }
 

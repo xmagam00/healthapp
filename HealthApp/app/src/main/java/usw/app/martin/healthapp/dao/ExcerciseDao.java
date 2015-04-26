@@ -2,9 +2,12 @@ package usw.app.martin.healthapp.dao;
 
 import android.content.Context;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import usw.app.martin.healthapp.helper.MySqlLiteHelper;
+import usw.app.martin.healthapp.model.ExcerciseModel;
 import usw.app.martin.healthapp.model.MealModel;
 
 /**
@@ -18,11 +21,15 @@ public class ExcerciseDao {
         helper = new MySqlLiteHelper(context);
     }
 
-    public List<MealModel> getAllMeals(){
+    public HashMap<String, List<ExcerciseModel>> getAllExcercises(){
         return helper.getAllExcercises();
     }
 
-    public void insertMeal(MealModel model){
+    public void insertExcercise(ExcerciseModel model){
         helper.insertExcercise(model);
+    }
+
+    public HashMap<String, ArrayList<ExcerciseModel>> getBurnCaloriesForLastWeek(){
+        return helper.getBurnCaloriesForLastWeek();
     }
 }

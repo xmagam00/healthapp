@@ -1,6 +1,6 @@
 package usw.app.martin.healthapp.model;
 
-import java.util.Date;
+
 
 /**
  * Created by Martin on 25. 04. 2015.
@@ -8,15 +8,15 @@ import java.util.Date;
 public class ExcerciseModel {
 
     private String name;
-    private long duration;
-    private long calories;
-    private Date executed;
+    private Long duration;
+    private Long calories;
+    private String executed;
 
-    public long getDuration() {
+    public Long getDuration() {
         return duration;
     }
 
-    public void setDuration(long duration) {
+    public void setDuration(Long duration) {
         this.duration = duration;
     }
 
@@ -28,19 +28,19 @@ public class ExcerciseModel {
         this.name = name;
     }
 
-    public long getCalories() {
+    public Long getCalories() {
         return calories;
     }
 
-    public void setCalories(long calories) {
+    public void setCalories(Long calories) {
         this.calories = calories;
     }
 
-    public Date getExecuted() {
+    public String getExecuted() {
         return executed;
     }
 
-    public void setExecuted(Date executed) {
+    public void setExecuted(String executed) {
         this.executed = executed;
     }
 

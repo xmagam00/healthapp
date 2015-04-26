@@ -38,6 +38,11 @@
             android:name=".activity.MealsActivity"
             android:label="@string/title_activity_meals" >
         </activity>
+        <activity
+            android:name=".activity.ExcerciseActivity"
+            android:label="@string/title_activity_excercise" >
+        </activity>
+
     </application>
 
 </manifest>

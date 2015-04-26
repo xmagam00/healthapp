@@ -1,6 +1,5 @@
 package usw.app.martin.healthapp.model;
 
-import java.util.Date;
 
 /**
  * Created by Martin on 25. 04. 2015.
@@ -10,13 +9,13 @@ public class MealModel {
     private String name;
     private long portions;
     private double calories;
-    private Date eaten;
+    private String eaten;
 
-    public Date getEaten() {
+    public String getEaten() {
         return eaten;
     }
 
-    public void setEaten(Date eaten) {
+    public void setEaten(String eaten) {
         this.eaten = eaten;
     }
 

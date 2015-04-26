@@ -1,28 +1,28 @@
 package usw.app.martin.healthapp.model;
 
-import java.util.Date;
+
 
 /**
  * Created by Martin on 25. 04. 2015.
  */
 public class HistoryWeightModel {
 
-    private long weight;
-    private Date entered;
+    private Long weight;
+    private String entered;
 
-    public Date getEntered() {
+    public String getEntered() {
         return entered;
     }
 
-    public void setEntered(Date entered) {
+    public void setEntered(String entered) {
         this.entered = entered;
     }
 
-    public long getWeight() {
+    public Long getWeight() {
         return weight;
     }
 
-    public void setWeight(long weight) {
+    public void setWeight(Long weight) {
         this.weight = weight;
     }
 }
