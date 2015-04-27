@@ -31,7 +31,7 @@ public class MySqlLiteHelper extends SQLiteOpenHelper {
     //table definition
     private static final String TABLE_EXCERCISES = "excercices";
     private static final String TABLE_MEALS = "meals";
-    private static final String TABLE_WEIGHT = "weight";
+    private static final String TABLE_WEIGHT = "weightTab";
 
 
     //columns def
@@ -57,7 +57,7 @@ public class MySqlLiteHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        final String CREATE_WEIGHT_TABLE = "CREATE TABLE IF NOT EXISTS weight ( id integer AUTO INCREMENT PRIMARY KEY, weight integer, entered text)";
+        final String CREATE_WEIGHT_TABLE = "CREATE TABLE IF NOT EXISTS weightTab ( id integer AUTO INCREMENT PRIMARY KEY, weight integer, entered text)";
         final String CREATE_MEALS_TABLE = "CREATE TABLE IF NOT EXISTS meals ( id integer AUTO INCREMENT PRIMARY KEY, name TEXT, portions integer, calories integer, eaten text)";
         final String CREATE_EXCERCICES_TABLE = "CREATE TABLE IF NOT EXISTS excercices ( id integer AUTO INCREMENT PRIMARY KEY, name TEXT, duration integer, executed text, calories integer)";
 
@@ -125,17 +125,21 @@ public class MySqlLiteHelper extends SQLiteOpenHelper {
 
     public HistoryWeightModel getLastWeight() {
 
-        final String query = "SELECT weight, entered FROM " + TABLE_WEIGHT + " ORDER BY id LIMIT 1";
+        final String query = "SELECT weight, entered FROM " + TABLE_WEIGHT + " ORDER BY id DESC LIMIT 1";
         SQLiteDatabase db = this.getReadableDatabase();
 
         HistoryWeightModel model = new HistoryWeightModel();
 
         Cursor cursor = db.rawQuery(query, null);
-        do {
-            model.setWeight(Long.getLong(cursor.getString(0)));
-            model.setEntered((cursor.getString(1)));
-        } while (cursor.moveToNext());
-
+        cursor.moveToFirst();
+        if (cursor.getCount() > 0) {
+            while (!cursor.isAfterLast()) {
+                model.setWeight(Long.getLong(cursor.getString(0)));
+                model.setEntered((cursor.getString(1)));
+                cursor.moveToNext();
+            }
+        }
+        cursor.close();
         return model;
     }
 

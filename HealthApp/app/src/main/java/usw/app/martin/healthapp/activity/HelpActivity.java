@@ -61,6 +61,8 @@ public class HelpActivity extends ActionBarActivity {
             intent = new Intent(HelpActivity.this, AboutActivity.class);
         } else if (id == R.id.action_overview){
             intent = new Intent(HelpActivity.this, MainActivity.class);
+        } else if (id == R.id.action_excercises){
+            intent = new Intent(HelpActivity.this, ExcerciseActivity.class);
         }
 
         if (intent != null) {

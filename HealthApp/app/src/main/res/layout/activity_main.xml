@@ -66,7 +66,7 @@
     <SeekBar
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/seekBar"
+        android:id="@+id/seekBarWeightMain"
         android:layout_below="@+id/textView18"
         android:layout_marginTop="28dp"
         android:layout_alignParentStart="true"
@@ -87,7 +87,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Set weight"
-        android:id="@+id/btnSave"
+        android:id="@+id/btnSaveMeal"
         android:layout_below="@+id/textView23"
         android:layout_alignEnd="@+id/textView18" />
 
@@ -96,7 +96,7 @@
         android:id="@+id/chart1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/btnSave"
+        android:layout_below="@+id/btnSaveMeal"
         android:layout_alignParentStart="true"
         android:layout_above="@+id/seekBar1"
         android:layout_alignParentEnd="true" />
@@ -106,17 +106,17 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Value:"
         android:id="@+id/textView20"
-        android:layout_below="@+id/seekBar"
+        android:layout_below="@+id/seekBarWeightMain"
         android:layout_alignParentStart="true" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="30"
-        android:id="@+id/textView21"
+        android:text="30.0"
+        android:id="@+id/weightMaintextView"
         android:layout_alignBottom="@+id/textView20"
-        android:layout_alignStart="@+id/btnSave" />
+        android:layout_alignStart="@+id/btnSaveMeal" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -124,14 +124,14 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="kg"
         android:id="@+id/textView22"
-        android:layout_alignBottom="@+id/textView21"
-        android:layout_alignEnd="@+id/btnSave" />
+        android:layout_alignBottom="@+id/weightMaintextView"
+        android:layout_alignEnd="@+id/btnSaveMeal" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Previous target weight:"
+        android:text="Target weight:"
         android:id="@+id/textView23"
         android:layout_below="@+id/textView20"
         android:layout_alignParentStart="true"
@@ -143,7 +143,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:id="@+id/textView24"
+        android:id="@+id/previousWeightTextWeight"
         android:layout_alignBottom="@+id/textView23"
-        android:layout_toEndOf="@+id/btnSave" />
+        android:layout_toEndOf="@+id/btnSaveMeal" />
 </RelativeLayout>

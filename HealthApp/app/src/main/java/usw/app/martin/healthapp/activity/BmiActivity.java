@@ -59,6 +59,8 @@ public class BmiActivity extends ActionBarActivity {
             intent = new Intent(BmiActivity.this, AboutActivity.class);
         } else if (id == R.id.action_overview){
             intent = new Intent(BmiActivity.this, MainActivity.class);
+        } else if (id == R.id.action_excercises){
+            intent = new Intent(BmiActivity.this, ExcerciseActivity.class);
         }
 
         if (intent != null) {

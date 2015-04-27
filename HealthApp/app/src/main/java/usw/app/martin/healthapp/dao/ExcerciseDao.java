@@ -29,7 +29,7 @@ public class ExcerciseDao {
         helper.insertExcercise(model);
     }
 
-    public HashMap<String, ArrayList<ExcerciseModel>> getBurnCaloriesForLastWeek(){
+    public HashMap<String, List<Long>> getBurnCaloriesForLastWeek() throws Exception {
         return helper.getBurnCaloriesForLastWeek();
     }
 }

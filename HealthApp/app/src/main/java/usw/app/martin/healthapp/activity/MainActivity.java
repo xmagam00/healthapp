@@ -9,16 +9,16 @@ import android.view.MenuItem;
 
 import usw.app.martin.healthapp.R;
 import usw.app.martin.healthapp.customComponents.MyValueFormatter;
+import usw.app.martin.healthapp.dao.HistoryWeightDao;
+import usw.app.martin.healthapp.model.HistoryWeightModel;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import android.app.Activity;
-import android.app.DatePickerDialog;
-import android.app.Dialog;
-import android.os.Bundle;
-import android.view.Menu;
+import java.util.Date;
+
 import android.view.View;
-import android.widget.DatePicker;
+import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,39 +30,45 @@ import com.github.mikephil.charting.components.Legend.LegendPosition;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.XAxis.XAxisPosition;
 import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.components.YAxis.AxisDependency;
 import com.github.mikephil.charting.components.YAxis.YAxisLabelPosition;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.data.DataSet;
 import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.filter.Approximator;
-import com.github.mikephil.charting.data.filter.Approximator.ApproximatorType;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.Highlight;
 import com.github.mikephil.charting.utils.ValueFormatter;
-import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
-import com.github.mikephil.charting.utils.Highlight;
 
 
 public class MainActivity extends ActionBarActivity  implements OnChartValueSelectedListener {
 
     protected BarChart mChart;
-    private SeekBar mSeekBarX, mSeekBarY;
+    private SeekBar mSeekBarX, mSeekBarY, weightSeekBar;
     private TextView tvX, tvY;
-
     private Typeface mTf;
-    private DatePicker datePicker;
-    private Calendar calendar;
-    private TextView dateView;
-    private int year, month, day;
+    private TextView weightSeekValueTextView, previousWeightTextWeight;
+    private int weightSeekValue;
+    private HistoryWeightDao historyWeightDao;
+    private Button btnSaveWeight;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        historyWeightDao = new HistoryWeightDao(this);
+
+        previousWeightTextWeight = (TextView)findViewById(R.id.previousWeightTextWeight);
+
+        //previousWeightTextWeight.setText(historyWeightDao.getLastWeight().getEntered()+ " kg");
+
+        weightSeekValueTextView = (TextView)findViewById(R.id.weightMaintextView);
+
+        btnSaveWeight = (Button)findViewById(R.id.btnSaveMeal);
+
+        weightSeekBar = (SeekBar)findViewById(R.id.seekBarWeightMain);
+        weightSeekBar.setOnSeekBarChangeListener(weightBar);
 
         mChart = (BarChart) findViewById(R.id.chart1);
         mChart.setOnChartValueSelectedListener(this);
@@ -120,42 +126,26 @@ public class MainActivity extends ActionBarActivity  implements OnChartValueSele
 
         setData(12, 50);
 
+        btnSaveWeight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                Date date = new Date();
+
+                HistoryWeightModel model = new HistoryWeightModel();
+                model.setWeight(new Long(weightSeekValue));
+                model.setEntered(dateFormat.format(date));
+
+                historyWeightDao.insertWeight(model);
+                HistoryWeightModel lastWeight = historyWeightDao.getLastWeight();
+                previousWeightTextWeight.setText( lastWeight.getWeight() + " kg Date: " + lastWeight.getEntered());
+                Toast toast = Toast.makeText(MainActivity.this, "Inserted target weight", Toast.LENGTH_LONG);
+                toast.show();
+
+            }
+        });
+
     }
-
-    @SuppressWarnings("deprecation")
-    public void setDate(View view) {
-        showDialog(999);
-        Toast.makeText(getApplicationContext(), "ca", Toast.LENGTH_SHORT)
-                .show();
-    }
-
-    @Override
-    protected Dialog onCreateDialog(int id) {
-        // TODO Auto-generated method stub
-        if (id == 999) {
-            return new DatePickerDialog(this, myDateListener, year, month, day);
-        }
-        return null;
-    }
-
-    private DatePickerDialog.OnDateSetListener myDateListener
-            = new DatePickerDialog.OnDateSetListener() {
-
-        @Override
-        public void onDateSet(DatePicker arg0, int arg1, int arg2, int arg3) {
-            // TODO Auto-generated method stub
-            // arg1 = year
-            // arg2 = month
-            // arg3 = day
-            showDate(arg1, arg2+1, arg3);
-        }
-    };
-
-    private void showDate(int year, int month, int day) {
-        dateView.setText(new StringBuilder().append(day).append("/")
-                .append(month).append("/").append(year));
-    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -182,6 +172,8 @@ public class MainActivity extends ActionBarActivity  implements OnChartValueSele
             intent = new Intent(MainActivity.this, AboutActivity.class);
         } else if (id == R.id.action_overview){
             intent = new Intent(MainActivity.this, MainActivity.class);
+        } else if (id == R.id.action_excercises){
+            intent = new Intent(MainActivity.this, ExcerciseActivity.class);
         }
 
         if (intent != null) {
@@ -229,4 +221,23 @@ public class MainActivity extends ActionBarActivity  implements OnChartValueSele
 
         mChart.setData(data);
     }
+
+    SeekBar.OnSeekBarChangeListener  weightBar = new SeekBar.OnSeekBarChangeListener() {
+        int progress = 0;
+        @Override
+        public void onProgressChanged(SeekBar seekBar, int progresValue, boolean fromUser) {
+            progresValue += 30;
+            weightSeekValue = progresValue;
+            weightSeekValueTextView.setText(Double.toString(weightSeekValue));
+        }
+
+        @Override
+        public void onStartTrackingTouch(SeekBar seekBar) {
+        }
+
+        @Override
+        public void onStopTrackingTouch(SeekBar seekBar) {
+        }
+
+    };
 }
