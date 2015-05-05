@@ -8,7 +8,7 @@ public class MealModel {
 
     private String name;
     private long portions;
-    private double calories;
+    private long calories;
     private String eaten;
 
     public String getEaten() {
@@ -24,7 +24,7 @@ public class MealModel {
         return calories;
     }
 
-    public void setCalories(double calories) {
+    public void setCalories(long calories) {
         this.calories = calories;
     }
 

@@ -1,7 +1,6 @@
 package usw.app.martin.healthapp.activity;
 
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -10,12 +9,16 @@ import android.view.MenuItem;
 import usw.app.martin.healthapp.R;
 import usw.app.martin.healthapp.customComponents.MyValueFormatter;
 import usw.app.martin.healthapp.dao.HistoryWeightDao;
+import usw.app.martin.healthapp.model.ExcerciseModel;
 import usw.app.martin.healthapp.model.HistoryWeightModel;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import android.view.View;
 import android.widget.Button;
@@ -44,10 +47,8 @@ public class MainActivity extends ActionBarActivity  implements OnChartValueSele
 
     protected BarChart mChart;
     private SeekBar weightSeekBar, actualWeightSeekbar;
-    private TextView tvX, tvY;
-    private Typeface mTf;
     private TextView weightSeekValueTextView, previousWeightTextWeight,textViewActual,textViewActualWeight, textViewDays;
-    private int weightSeekValue, weightSeekValueActual;
+    private long weightSeekValue, weightSeekValueActual;
     private HistoryWeightDao historyWeightDao;
     private Button btnSaveWeight;
 
@@ -64,10 +65,6 @@ public class MainActivity extends ActionBarActivity  implements OnChartValueSele
         textViewDays = (TextView)findViewById(R.id.textViewDays);
 
         previousWeightTextWeight = (TextView) findViewById(R.id.previousWeightTextWeight);
-
-
-
-
 
         weightSeekValueTextView = (TextView)findViewById(R.id.weightMaintextView);
 
@@ -87,26 +84,14 @@ public class MainActivity extends ActionBarActivity  implements OnChartValueSele
 
         mChart.setDescription("");
 
-        // if more than 60 entries are displayed in the chart, no values will be
-        // drawn
         mChart.setMaxVisibleValueCount(60);
 
-        // scaling can now only be done on x- and y-axis separately
         mChart.setPinchZoom(false);
 
-        // draw shadows for each bar that show the maximum value
-        // mChart.setDrawBarShadow(true);
-
-        // mChart.setDrawXLabels(false);
-
         mChart.setDrawGridBackground(false);
-        // mChart.setDrawYLabels(false);
-
-        //mTf = Typeface.createFromAsset(getAssets(), "OpenSans-Regular.ttf");
-
         XAxis xAxis = mChart.getXAxis();
         xAxis.setPosition(XAxisPosition.BOTTOM);
-        //xAxis.setTypeface(mTf);
+
         xAxis.setDrawGridLines(false);
         xAxis.setSpaceBetweenLabels(2);
 
@@ -133,11 +118,17 @@ public class MainActivity extends ActionBarActivity  implements OnChartValueSele
         l.setTextSize(11f);
         l.setXEntrySpace(4f);
 
-        setData(12, 50);
+        setData();
 
         btnSaveWeight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if ((new Long(textViewActual.getText().toString())) <= (new Long(weightSeekValueTextView.getText().toString()))){
+                    Toast toast = Toast.makeText(MainActivity.this, "Target weight should be less than actual", Toast.LENGTH_LONG);
+                    toast.show();
+                    return;
+                }
+
                 DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
                 Date date = new Date();
 
@@ -148,16 +139,16 @@ public class MainActivity extends ActionBarActivity  implements OnChartValueSele
 
                 model.setEntered(dateFormat.format(date));
                 modelActual.setEntered(dateFormat.format(date));
-                modelActual.setWeight(Long.getLong(textViewActual.getText().toString()));
+                modelActual.setWeight(new Long(textViewActual.getText().toString()));
 
                 historyWeightDao.insertWeight(model);
                 historyWeightDao.insertActualWeight(modelActual);
 
                 HistoryWeightModel lastWeight = historyWeightDao.getLastWeight();
-                previousWeightTextWeight.setText( lastWeight.getWeight() + " kg Date: " + lastWeight.getEntered());
+                previousWeightTextWeight.setText( lastWeight.getWeight() + " kg");
 
                 HistoryWeightModel lastActualWeight = historyWeightDao.getLastActualWeight();
-                textViewActualWeight.setText( lastActualWeight.getWeight() + " kg Date: " + lastActualWeight.getEntered());
+                textViewActualWeight.setText( lastActualWeight.getWeight() + " kg");
 
                 Toast toast = Toast.makeText(MainActivity.this, "Inserted target weight and Actual weight", Toast.LENGTH_LONG);
                 toast.show();
@@ -165,16 +156,14 @@ public class MainActivity extends ActionBarActivity  implements OnChartValueSele
             }
         });
 
-        if (historyWeightDao.getLastActualWeight().getEntered() != null && historyWeightDao.getLastWeight().getEntered().length() > 0) {
-            textViewActualWeight.setText(historyWeightDao.getLastActualWeight().getEntered() + " kg");
+        if (historyWeightDao.getLastActualWeight().getEntered() != null && historyWeightDao.getLastActualWeight().getEntered().length() > 0) {
+            textViewActualWeight.setText(historyWeightDao.getLastActualWeight().getWeight() + " kg");
         } else {
             textViewActualWeight.setText("");
         }
 
-
-
         if (historyWeightDao.getLastWeight().getEntered() != null && historyWeightDao.getLastWeight().getEntered().length() > 0) {
-            previousWeightTextWeight.setText(historyWeightDao.getLastWeight().getEntered() + " kg");
+            previousWeightTextWeight.setText(historyWeightDao.getLastWeight().getWeight() + " kg");
         } else {
             previousWeightTextWeight.setText("");
         }
@@ -227,19 +216,28 @@ public class MainActivity extends ActionBarActivity  implements OnChartValueSele
     public void onNothingSelected() {
 
     }
-    private void setData(int count, float range) {
-
+    private void setData() {
+        HashMap<String,Long> caloriesPerWeek = new HashMap<String, Long>();
         ArrayList<String> xVals = new ArrayList<String>();
-        for (int i = 0; i < count; i++) {
-            xVals.add( (new Integer(i % 12)).toString());
-        }
-
         ArrayList<BarEntry> yVals1 = new ArrayList<BarEntry>();
 
-        for (int i = 0; i < count; i++) {
-            float mult = (range + 1);
-            float val = (float) (Math.random() * mult);
-            yVals1.add(new BarEntry(val, i));
+        try {
+             caloriesPerWeek =  historyWeightDao.getBurnCaloriesForLastWeek();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        for (Map.Entry<String, Long> entry : caloriesPerWeek.entrySet()) {
+            String key = entry.getKey().toString().substring(0,2);
+            char[] chars = new char[10];
+                    chars = key.toCharArray();
+
+            if (chars[1] == '/'){
+                key = key.substring(0,1);
+            }
+
+            Long calories =  entry.getValue();
+            xVals.add(key);
+            yVals1.add(new BarEntry(calories, new Integer(key)));
         }
 
         BarDataSet set1 = new BarDataSet(yVals1, "Calories burn over last week");
@@ -251,18 +249,16 @@ public class MainActivity extends ActionBarActivity  implements OnChartValueSele
         BarData data = new BarData(xVals, dataSets);
         data.setValueFormatter(new MyValueFormatter());
         data.setValueTextSize(10f);
-        data.setValueTypeface(mTf);
 
         mChart.setData(data);
     }
 
     SeekBar.OnSeekBarChangeListener  weightBar = new SeekBar.OnSeekBarChangeListener() {
-        int progress = 0;
         @Override
         public void onProgressChanged(SeekBar seekBar, int progresValue, boolean fromUser) {
             progresValue += 30;
             weightSeekValue = progresValue;
-            weightSeekValueTextView.setText(Double.toString(weightSeekValue));
+            weightSeekValueTextView.setText(Long.toString(weightSeekValue));
         }
 
         @Override
@@ -281,7 +277,7 @@ public class MainActivity extends ActionBarActivity  implements OnChartValueSele
         public void onProgressChanged(SeekBar seekBar, int progresValue, boolean fromUser) {
             progresValue += 30;
             weightSeekValueActual = progresValue;
-            textViewActual.setText(Double.toString(weightSeekValueActual));
+            textViewActual.setText(Long.toString(weightSeekValueActual));
         }
 
         @Override

@@ -22,7 +22,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/spinnerMeals"
         android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/textViewDate2" />
+        android:layout_toEndOf="@+id/textViewDate2"
+        android:layout_alignStart="@+id/editTextPortions" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -57,17 +58,16 @@
         android:text="Set Date"
         android:id="@+id/btnSaveDateMeal"
         android:layout_below="@+id/editTextPortions"
-        android:layout_alignEnd="@+id/spinnerMeals" />
+        android:layout_alignParentEnd="true" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:id="@+id/textViewDate2"
-        android:layout_below="@+id/textView15"
         android:layout_alignBottom="@+id/btnSaveDateMeal"
-        android:layout_alignEnd="@+id/btnSaveMeal"
-        android:layout_alignStart="@+id/editTextPortions" />
+        android:layout_alignStart="@+id/editTextPortions"
+        android:layout_toStartOf="@+id/btnSaveDateMeal" />
 
     <ExpandableListView
         android:id="@+id/lvExp2"
@@ -81,7 +81,9 @@
         android:inputType="number"
         android:ems="10"
         android:id="@+id/editTextPortions"
-        android:layout_alignBottom="@+id/textView15"
-        android:layout_alignParentEnd="true" />
+        android:hint="Enter number of portions"
+        android:gravity="center"
+        android:layout_below="@+id/spinnerMeals"
+        android:layout_alignEnd="@+id/lvExp2" />
 
 </RelativeLayout>

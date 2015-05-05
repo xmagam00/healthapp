@@ -25,14 +25,14 @@ import usw.app.martin.healthapp.model.MealModel;
 public class MySqlLiteHelper extends SQLiteOpenHelper {
 
     //DB information
-    private static final String DB_NAME = "HealthDB.db";
+    private static final String DB_NAME = "HDA.db";
     private static final int DB_VER = 1;
 
     //table definition
     private static final String TABLE_EXCERCISES = "excercices";
     private static final String TABLE_MEALS = "meals";
     private static final String TABLE_WEIGHT = "weightTab";
-    private static final String TABLE_WEIGHT_ACTUAL = "weightTabActual";
+    private static final String TABLE_WEIGHT_ACTUAL = "weighttabactual";
 
 
     //columns def
@@ -58,7 +58,7 @@ public class MySqlLiteHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        final String CREATE_WEIGHT_TABLE_ACTUAL = "CREATE TABLE IF NOT EXISTS weightTabActual ( id integer AUTO INCREMENT PRIMARY KEY, weight integer, entered text)";
+        final String CREATE_WEIGHT_TABLE_ACTUAL = "CREATE TABLE IF NOT EXISTS " + TABLE_WEIGHT_ACTUAL + " ( id integer AUTO INCREMENT PRIMARY KEY, weight integer, entered text)";
         final String CREATE_WEIGHT_TABLE = "CREATE TABLE IF NOT EXISTS weightTab ( id integer AUTO INCREMENT PRIMARY KEY, weight integer, entered text)";
         final String CREATE_MEALS_TABLE = "CREATE TABLE IF NOT EXISTS meals ( id integer AUTO INCREMENT PRIMARY KEY, name TEXT, portions integer, calories integer, eaten text)";
         final String CREATE_EXCERCICES_TABLE = "CREATE TABLE IF NOT EXISTS excercices ( id integer AUTO INCREMENT PRIMARY KEY, name TEXT, duration integer, executed text, calories integer)";
@@ -72,7 +72,9 @@ public class MySqlLiteHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        final String CREATE_WEIGHT_TABLE_ACTUAL = "CREATE TABLE IF NOT EXISTS " + TABLE_WEIGHT_ACTUAL + " ( id integer AUTO INCREMENT PRIMARY KEY, weight integer, entered text)";
 
+        db.execSQL(CREATE_WEIGHT_TABLE_ACTUAL);
     }
 
     public HashMap<String, List<ExcerciseModel>> getAllExcercises() {
@@ -85,23 +87,27 @@ public class MySqlLiteHelper extends SQLiteOpenHelper {
         String query = "SELECT name, duration, calories FROM " + TABLE_EXCERCISES + " WHERE executed=?";
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(allDateQuery, null);
-        if (cursor.moveToFirst()) {
-            do {
+        cursor.moveToFirst();
+        if (cursor.getCount() > 0) {
+            while (!cursor.isAfterLast()) {
                 Cursor c = db.rawQuery(query, new String[] { cursor.getString(0) });
-                do {
+                c.moveToFirst();
+                while (!c.isAfterLast()) {
                     ExcerciseModel model = new ExcerciseModel();
 
                     model.setName(c.getString(0));
-                    model.setDuration(Long.getLong(c.getString(1)));
-                    model.setCalories(Long.getLong(c.getString(2)));
+                    model.setDuration(new Long(c.getString(1)));
+                    model.setCalories(new Long(c.getString(2)));
                     model.setExecuted((cursor.getString(0)));
                     tmpExcercice.add(model);
-
-                } while(c.moveToNext());
+                    c.moveToNext();
+                }
                 excercices.put(cursor.getString(0), tmpExcercice);
-            } while (cursor.moveToNext());
+                tmpExcercice = new ArrayList<ExcerciseModel>();
+                cursor.moveToNext();
+            }
         }
-        db.close();
+        cursor.close();
         return excercices;
     }
 
@@ -138,7 +144,7 @@ public class MySqlLiteHelper extends SQLiteOpenHelper {
         cursor.moveToFirst();
         if (cursor.getCount() > 0) {
             while (!cursor.isAfterLast()) {
-                model.setWeight(Long.getLong(cursor.getString(0)));
+                model.setWeight(new Long(cursor.getString(0)));
                 model.setEntered((cursor.getString(1)));
                 cursor.moveToNext();
             }
@@ -157,23 +163,30 @@ public class MySqlLiteHelper extends SQLiteOpenHelper {
         String query = "SELECT name, portions, calories FROM " + TABLE_MEALS + " WHERE eaten=?";
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(allDateQuery, null);
-        if (cursor.moveToFirst()) {
-            do {
+        cursor.moveToFirst();
+        if (cursor.getCount() > 0) {
+            while (!cursor.isAfterLast()) {
                 Cursor c = db.rawQuery(query, new String[] { cursor.getString(0) });
-                do {
-                    MealModel model = new MealModel();
+                c.moveToFirst();
+                if (c.getCount() > 0) {
+                    while (!c.isAfterLast()) {
+                        MealModel model = new MealModel();
 
-                    model.setName(c.getString(0));
-                    model.setPortions(Long.getLong(c.getString(1)));
-                    model.setCalories(Long.getLong(c.getString(2)));
-                    model.setEaten((cursor.getString(0)));
-                    tmpMeals.add(model);
-
-                } while(c.moveToNext());
+                        model.setName(c.getString(0));
+                        model.setPortions(new Long(c.getString(1)));
+                        model.setCalories(new Long(c.getString(2)));
+                        model.setEaten((cursor.getString(0)));
+                        tmpMeals.add(model);
+                        c.moveToNext();
+                    }
+                }
                 meals.put(cursor.getString(0), tmpMeals);
-            } while (cursor.moveToNext());
+                tmpMeals = new ArrayList<MealModel>();
+                cursor.moveToNext();
+            }
         }
-        db.close();
+        cursor.close();
+
         return meals;
     }
 
@@ -190,7 +203,7 @@ public class MySqlLiteHelper extends SQLiteOpenHelper {
 
     }
 
-    public HashMap<String, Long> getBurnCaloriesForLastWeek() throws Exception{
+    public HashMap<String, Long> getBurnCaloriesForLastWeek() throws Exception {
 
         HashMap<String, Long> calories = new HashMap<String, Long>();
 
@@ -205,13 +218,13 @@ public class MySqlLiteHelper extends SQLiteOpenHelper {
         String str_date = dateFormat.format(cal.getTime());
         String end_date = dateFormat.format(date);
 
-        DateFormat formatter ;
+        DateFormat formatter;
 
-        formatter = new SimpleDateFormat("dd/MM/yyyy");
-        Date  startDate = (Date)formatter.parse(str_date);
-        Date  endDate = (Date)formatter.parse(end_date);
-        long interval = 24*1000 * 60 * 60;
-        long endTime =endDate.getTime() ;
+        formatter = new SimpleDateFormat("d/M/yyyy");
+        Date startDate = (Date) formatter.parse(str_date);
+        Date endDate = (Date) formatter.parse(end_date);
+        long interval = 24 * 1000 * 60 * 60;
+        long endTime = endDate.getTime();
         long curTime = startDate.getTime();
         while (curTime <= endTime) {
             dates.add(new Date(curTime));
@@ -223,18 +236,27 @@ public class MySqlLiteHelper extends SQLiteOpenHelper {
 
         Cursor cursor = null;
 
-        for(int i=0;i<dates.size();i++){
+        for (int i = 0; i < dates.size(); i++) {
 
-            Date lDate =(Date)dates.get(i);
+            Date lDate = (Date) dates.get(i);
             String ds = formatter.format(lDate);
             cursor = db.rawQuery(query, new String[]{ds});
-            Long caloriesVal = 0l;
-            do {
-                caloriesVal += new Long(cursor.getString(0));
-            } while(cursor.moveToNext());
-            calories.put(ds, caloriesVal);
+            Long caloriesVal = new Long(0);
+
+            if (cursor.getCount() > 0) {
+                while (!cursor.isAfterLast()) {
+                    caloriesVal += new Long(cursor.getString(0));
+                    cursor.moveToNext();
+                }
+                calories.put(ds, caloriesVal);
+                caloriesVal = new Long(0);
+            } else {
+                calories.put(ds, caloriesVal);
+                caloriesVal = new Long(0);
+            }
         }
 
+        cursor.close();
         return calories;
     }
 
@@ -248,7 +270,7 @@ public class MySqlLiteHelper extends SQLiteOpenHelper {
         cursor.moveToFirst();
         if (cursor.getCount() > 0) {
             while (!cursor.isAfterLast()) {
-                model.setWeight(Long.getLong(cursor.getString(0)));
+                model.setWeight(new Long(cursor.getString(0)));
                 model.setEntered((cursor.getString(1)));
                 cursor.moveToNext();
             }

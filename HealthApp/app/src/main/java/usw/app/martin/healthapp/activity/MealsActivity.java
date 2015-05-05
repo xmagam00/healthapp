@@ -3,6 +3,7 @@ package usw.app.martin.healthapp.activity;
 import android.app.DatePickerDialog;
 import android.app.DialogFragment;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -16,8 +17,12 @@ import usw.app.martin.healthapp.model.MealModel;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -67,8 +72,8 @@ public class MealsActivity extends ActionBarActivity {
         listAdapter = new ExpandableListAdapter(this, listDataHeader, listDataChild);
 
         // setting list adapter
-  //      expListView.setAdapter(listAdapter);
-
+        expListView.setAdapter(listAdapter);
+        expListView.setBackgroundColor(Color.BLUE);
         // Listview Group click listener
         expListView.setOnGroupClickListener(new OnGroupClickListener() {
 
@@ -163,6 +168,14 @@ public class MealsActivity extends ActionBarActivity {
                     Toast.makeText(MealsActivity.this, "Error: Set date of eating", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                Date date = new Date();
+                Date enteredDate = new Date(textViewDate.getText().toString());
+
+                if (enteredDate.after(date)){
+                    Toast.makeText(MealsActivity.this, "Error: Entered date is in the future", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 Long portionsVal = new Long(portions.getText().toString());
                 Long calories = null;
 
@@ -197,6 +210,13 @@ public class MealsActivity extends ActionBarActivity {
                 model.setCalories(calories);
                 model.setEaten(textViewDate.getText().toString());
                 mealDao.insertMeal(model);
+
+                prepareListData();
+                listAdapter = new ExpandableListAdapter(getApplicationContext(), listDataHeader, listDataChild);
+                // setting list adapter
+                expListView.setAdapter(listAdapter);
+                expListView.setBackgroundColor(Color.BLUE);
+                //expListView.invalidate();
                 Toast.makeText(MealsActivity.this, "You have eaten " + calories.toString() + " calories", Toast.LENGTH_LONG).show();
             }
         });
@@ -266,46 +286,20 @@ public class MealsActivity extends ActionBarActivity {
     }
 
     private void prepareListData() {
+        HashMap<String,List<MealModel>> meals = mealDao.getAllMeals();
         listDataHeader = new ArrayList<String>();
         listDataChild = new HashMap<String, List<String>>();
 
-        // Adding child data
-        listDataHeader.add("Top 250");
-        listDataHeader.add("Now Showing");
-        listDataHeader.add("Coming Soon..");
-
-        // Adding child data
-        List<String> top250 = new ArrayList<String>();
-        top250.add("The Shawshank Redemption");
-        top250.add("The Godfather");
-        top250.add("The Godfather: Part II");
-        top250.add("Pulp Fiction");
-        top250.add("The Good, the Bad and the Ugly");
-        top250.add("The Dark Knight");
-        top250.add("12 Angry Men");
-
-        List<String> nowShowing = new ArrayList<String>();
-        nowShowing.add("The Conjuring");
-        nowShowing.add("Despicable Me 2");
-        nowShowing.add("Turbo");
-        nowShowing.add("Grown Ups 2");
-        nowShowing.add("Red 2");
-        nowShowing.add("The Wolverine");
-
-        List<String> comingSoon = new ArrayList<String>();
-        comingSoon.add("2 Guns");
-        comingSoon.add("The Smurfs 2");
-        comingSoon.add("The Spectacular Now");
-        comingSoon.add("The Canyons");
-        comingSoon.add("Europa Report");
-
-        listDataChild.put(listDataHeader.get(0), top250); // Header, Child data
-        listDataChild.put(listDataHeader.get(1), nowShowing);
-        listDataChild.put(listDataHeader.get(2), comingSoon);
+        for (Map.Entry<String, List<MealModel>> entry : meals.entrySet()) {
+            String key = entry.getKey();
+            List<String> tmpList = new ArrayList<String>();
+            List<MealModel> value = entry.getValue();
+            for (MealModel model : value){
+                tmpList.add("" + model.getName() + " Portion(s): " + model.getPortions() + " " + model.getPortions() + "cal(s)");
+            }
+            listDataHeader.add(key);
+            listDataChild.put(key, tmpList);
+        }
     }
 
-    public void showDatePickerDialog(View v) {
-        DialogFragment newFragment = new DatePickerFragment();
-        //newFragment.show(getSupportFragmentManager(), "datePicker");
-    }
 }
