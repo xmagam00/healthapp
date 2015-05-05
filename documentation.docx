@@ -1,1 +1,28 @@
-Health app manual
+Health application manual
+This manual give you basic information about health application. The app is designed mainly for people who would like to live more healthy. Also it can be used by sportmen, and another people.
+
+Navigation
+Navigation trogh app is realized by menu which is located in the right cornet marker by three vertical dots. After click on this „three dots“ you will see some options. After clicking on the some option you will see different screen with different options which will be described later.
+
+Main screen
+After clicking on the app icon it will show you splash screen. After finish loading app you will the main screen. On the main screen you can recognized two seek bars where you can set up your actual weight and your target weight that you would like to loose. After clicking button under seek bars you save these values, and you can see them whenever you return to this screen. Below button is the graph with calories burn over last week. Each bar in the graph represent the value of calories burnt per this day. On the main screen you will how many days you have to practise to reach your target weight. You can navigate to this screen trought menu and options „Overview“. 
+
+Meals
+You can navigate to this screen by clicking „Meals“ option in the menu. On this screen you can set the meal that you ate at the certain day, also portions and by clicking the button „set date“ you will set date when you ate. After you click on the „save button“ application will calculate how many calories you ate and you can check you meals bellow „save button“ where you can see the dates. After clicking on the date item it will expand and you will all meals with portions and calories.
+
+Excercises
+You can navigate to  this screen by clicking „Excercises“ option in the menu. On this screen you can set the excercise that you did at the certain day, also duration in minutes and by clicking the button „set date“ you will set date when you did exercise. After you click on the „save button“ application will calculate how many calories you burnt by excercise and you can check you excercise  bellow „save button“ where you can see the dates. After clicking on the date item it will expand and you will all excersises with duration in minutes and calories burnt.
+
+BMI calculation
+You can navigate to this screen by clicking „BMI“ option in the menu. On this screen you can calculcate your BMI index according your age, height and weight. You can change metrix unit by clicking on the select box near seek bars. Calculation is triggered by changing values in the seek bars. 
+
+About
+You can navigate to this screen by clicking „About“ option in the menu. On this screen you can see basic information about author, version of appication and company.
+
+Help
+You can navigate to this screen by clicking „Help“ option in the menu. On this screen you gain basic help information. Or you can call by clicking on the button to our 24/7 support.
+
+Requirements
+Health application requires minimal 5.0 version of Android OS(Lollipop). Memory and CPU requirements are very low.
+
+

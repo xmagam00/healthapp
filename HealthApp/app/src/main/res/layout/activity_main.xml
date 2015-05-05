@@ -6,54 +6,6 @@
     android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity">
 
 
-    <SeekBar
-        android:id="@+id/seekBar2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_margin="8dp"
-        android:layout_toLeftOf="@+id/tvYMax"
-        android:layout_marginRight="5dp"
-        android:max="200"
-        android:paddingBottom="12dp" />
-
-    <SeekBar
-        android:id="@+id/seekBar1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/seekBar2"
-        android:layout_margin="8dp"
-        android:layout_marginBottom="35dp"
-        android:layout_toLeftOf="@+id/tvXMax"
-        android:layout_marginRight="5dp"
-        android:max="1500"
-        android:paddingBottom="12dp" />
-
-    <TextView
-        android:id="@+id/tvXMax"
-        android:layout_width="50dp"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/seekBar1"
-        android:layout_alignParentRight="true"
-        android:text="500"
-        android:layout_marginBottom="15dp"
-        android:layout_marginRight="10dp"
-        android:gravity="right"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <TextView
-        android:id="@+id/tvYMax"
-        android:layout_width="50dp"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/seekBar2"
-        android:layout_alignParentRight="true"
-        android:text="500"
-        android:layout_marginBottom="15dp"
-        android:layout_marginRight="10dp"
-        android:gravity="right"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -70,9 +22,10 @@
         android:layout_below="@+id/textView18"
         android:layout_marginTop="28dp"
         android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
         android:max="220"
-        android:indeterminate="false" />
+        android:indeterminate="false"
+        android:layout_toStartOf="@+id/btnSaveMeal"
+        android:layout_alignEnd="@+id/textView19" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -81,7 +34,8 @@
         android:text="Target weight"
         android:id="@+id/textView19"
         android:layout_below="@+id/textView18"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@+id/btnSaveMeal" />
 
     <Button
         android:layout_width="wrap_content"
@@ -89,24 +43,14 @@
         android:text="Set weight"
         android:id="@+id/btnSaveMeal"
         android:layout_below="@+id/textView23"
-        android:layout_alignEnd="@+id/textView18" />
+        android:layout_centerHorizontal="true" />
 
 
     <com.github.mikephil.charting.charts.BarChart
         android:id="@+id/chart1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/btnSaveMeal"
-        android:layout_alignParentStart="true"
-        android:layout_above="@+id/seekBar1"
-        android:layout_alignParentEnd="true" />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Value:"
-        android:id="@+id/textView20"
-        android:layout_below="@+id/seekBarWeightMain"
+        android:layout_below="@+id/textView24"
         android:layout_alignParentStart="true" />
 
     <TextView
@@ -115,8 +59,8 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="30.0"
         android:id="@+id/weightMaintextView"
-        android:layout_alignBottom="@+id/textView20"
-        android:layout_alignStart="@+id/btnSaveMeal" />
+        android:layout_below="@+id/seekBarWeightMain"
+        android:layout_toStartOf="@+id/textView18" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -124,8 +68,9 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="kg"
         android:id="@+id/textView22"
-        android:layout_alignBottom="@+id/weightMaintextView"
-        android:layout_alignEnd="@+id/btnSaveMeal" />
+        android:layout_alignTop="@+id/weightMaintextView"
+        android:layout_toEndOf="@+id/weightMaintextView"
+        android:layout_marginStart="9dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -133,11 +78,11 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Target weight:"
         android:id="@+id/textView23"
-        android:layout_below="@+id/textView20"
-        android:layout_alignParentStart="true"
         android:capitalize="none"
         android:elegantTextHeight="false"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:layout_below="@+id/textView17"
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -146,4 +91,83 @@
         android:id="@+id/previousWeightTextWeight"
         android:layout_alignBottom="@+id/textView23"
         android:layout_toEndOf="@+id/btnSaveMeal" />
+
+    <SeekBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/seekBarActuaWeight"
+        android:max="220"
+        android:indeterminate="false"
+        android:layout_above="@+id/textView22"
+        android:layout_alignEnd="@+id/textView21"
+        android:layout_toEndOf="@+id/textView24" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Actual weight:"
+        android:id="@+id/textView17"
+        android:textStyle="bold"
+        android:layout_below="@+id/weightMaintextView"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="30.0"
+        android:id="@+id/textViewActual"
+        android:layout_below="@+id/seekBarActuaWeight"
+        android:layout_toStartOf="@+id/previousWeightTextWeight" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Actual weight"
+        android:id="@+id/textViewActualWeight"
+        android:layout_alignTop="@+id/textView19"
+        android:layout_alignEnd="@+id/chart1"
+        android:layout_toEndOf="@+id/textView22"
+        android:layout_alignStart="@+id/textViewActual" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="kg"
+        android:id="@+id/textView21"
+        android:layout_below="@+id/seekBarActuaWeight"
+        android:layout_alignEnd="@+id/textViewActualWeight" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/textViewActualW"
+        android:layout_alignBaseline="@+id/textView17"
+        android:layout_alignBottom="@+id/textView17"
+        android:layout_alignEnd="@+id/textView24" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Days to target weight:"
+        android:id="@+id/textView24"
+        android:textStyle="bold"
+        android:layout_alignBaseline="@+id/textViewDays"
+        android:layout_alignBottom="@+id/textViewDays"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/textViewDays"
+        android:textColor="#ffff000f"
+        android:layout_marginTop="12dp"
+        android:layout_below="@+id/btnSaveMeal"
+        android:layout_toStartOf="@+id/textViewActual" />
 </RelativeLayout>

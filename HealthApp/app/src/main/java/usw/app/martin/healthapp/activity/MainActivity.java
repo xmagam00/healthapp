@@ -43,11 +43,11 @@ import com.github.mikephil.charting.utils.ValueFormatter;
 public class MainActivity extends ActionBarActivity  implements OnChartValueSelectedListener {
 
     protected BarChart mChart;
-    private SeekBar mSeekBarX, mSeekBarY, weightSeekBar;
+    private SeekBar weightSeekBar, actualWeightSeekbar;
     private TextView tvX, tvY;
     private Typeface mTf;
-    private TextView weightSeekValueTextView, previousWeightTextWeight;
-    private int weightSeekValue;
+    private TextView weightSeekValueTextView, previousWeightTextWeight,textViewActual,textViewActualWeight, textViewDays;
+    private int weightSeekValue, weightSeekValueActual;
     private HistoryWeightDao historyWeightDao;
     private Button btnSaveWeight;
 
@@ -58,10 +58,16 @@ public class MainActivity extends ActionBarActivity  implements OnChartValueSele
         setContentView(R.layout.activity_main);
 
         historyWeightDao = new HistoryWeightDao(this);
+        textViewActual = (TextView)findViewById(R.id.textViewActual);
 
-        previousWeightTextWeight = (TextView)findViewById(R.id.previousWeightTextWeight);
+        textViewActualWeight = (TextView)findViewById(R.id.textViewActualW);
+        textViewDays = (TextView)findViewById(R.id.textViewDays);
 
-        //previousWeightTextWeight.setText(historyWeightDao.getLastWeight().getEntered()+ " kg");
+        previousWeightTextWeight = (TextView) findViewById(R.id.previousWeightTextWeight);
+
+
+
+
 
         weightSeekValueTextView = (TextView)findViewById(R.id.weightMaintextView);
 
@@ -69,6 +75,9 @@ public class MainActivity extends ActionBarActivity  implements OnChartValueSele
 
         weightSeekBar = (SeekBar)findViewById(R.id.seekBarWeightMain);
         weightSeekBar.setOnSeekBarChangeListener(weightBar);
+
+        actualWeightSeekbar = (SeekBar)findViewById(R.id.seekBarActuaWeight);
+        actualWeightSeekbar.setOnSeekBarChangeListener(actualWeight);
 
         mChart = (BarChart) findViewById(R.id.chart1);
         mChart.setOnChartValueSelectedListener(this);
@@ -133,17 +142,42 @@ public class MainActivity extends ActionBarActivity  implements OnChartValueSele
                 Date date = new Date();
 
                 HistoryWeightModel model = new HistoryWeightModel();
-                model.setWeight(new Long(weightSeekValue));
+                HistoryWeightModel modelActual = new HistoryWeightModel();
+
+                model.setWeight(new Long(weightSeekValueTextView.getText().toString()));
+
                 model.setEntered(dateFormat.format(date));
+                modelActual.setEntered(dateFormat.format(date));
+                modelActual.setWeight(Long.getLong(textViewActual.getText().toString()));
 
                 historyWeightDao.insertWeight(model);
+                historyWeightDao.insertActualWeight(modelActual);
+
                 HistoryWeightModel lastWeight = historyWeightDao.getLastWeight();
                 previousWeightTextWeight.setText( lastWeight.getWeight() + " kg Date: " + lastWeight.getEntered());
-                Toast toast = Toast.makeText(MainActivity.this, "Inserted target weight", Toast.LENGTH_LONG);
+
+                HistoryWeightModel lastActualWeight = historyWeightDao.getLastActualWeight();
+                textViewActualWeight.setText( lastActualWeight.getWeight() + " kg Date: " + lastActualWeight.getEntered());
+
+                Toast toast = Toast.makeText(MainActivity.this, "Inserted target weight and Actual weight", Toast.LENGTH_LONG);
                 toast.show();
 
             }
         });
+
+        if (historyWeightDao.getLastActualWeight().getEntered() != null && historyWeightDao.getLastWeight().getEntered().length() > 0) {
+            textViewActualWeight.setText(historyWeightDao.getLastActualWeight().getEntered() + " kg");
+        } else {
+            textViewActualWeight.setText("");
+        }
+
+
+
+        if (historyWeightDao.getLastWeight().getEntered() != null && historyWeightDao.getLastWeight().getEntered().length() > 0) {
+            previousWeightTextWeight.setText(historyWeightDao.getLastWeight().getEntered() + " kg");
+        } else {
+            previousWeightTextWeight.setText("");
+        }
 
     }
 
@@ -208,7 +242,7 @@ public class MainActivity extends ActionBarActivity  implements OnChartValueSele
             yVals1.add(new BarEntry(val, i));
         }
 
-        BarDataSet set1 = new BarDataSet(yVals1, "DataSet");
+        BarDataSet set1 = new BarDataSet(yVals1, "Calories burn over last week");
         set1.setBarSpacePercent(35f);
 
         ArrayList<BarDataSet> dataSets = new ArrayList<BarDataSet>();
@@ -240,4 +274,25 @@ public class MainActivity extends ActionBarActivity  implements OnChartValueSele
         }
 
     };
+
+    SeekBar.OnSeekBarChangeListener  actualWeight = new SeekBar.OnSeekBarChangeListener() {
+        int progress = 0;
+        @Override
+        public void onProgressChanged(SeekBar seekBar, int progresValue, boolean fromUser) {
+            progresValue += 30;
+            weightSeekValueActual = progresValue;
+            textViewActual.setText(Double.toString(weightSeekValueActual));
+        }
+
+        @Override
+        public void onStartTrackingTouch(SeekBar seekBar) {
+        }
+
+        @Override
+        public void onStopTrackingTouch(SeekBar seekBar) {
+        }
+
+    };
+
+
 }

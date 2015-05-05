@@ -32,6 +32,7 @@ public class MySqlLiteHelper extends SQLiteOpenHelper {
     private static final String TABLE_EXCERCISES = "excercices";
     private static final String TABLE_MEALS = "meals";
     private static final String TABLE_WEIGHT = "weightTab";
+    private static final String TABLE_WEIGHT_ACTUAL = "weightTabActual";
 
 
     //columns def
@@ -57,13 +58,16 @@ public class MySqlLiteHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        final String CREATE_WEIGHT_TABLE_ACTUAL = "CREATE TABLE IF NOT EXISTS weightTabActual ( id integer AUTO INCREMENT PRIMARY KEY, weight integer, entered text)";
         final String CREATE_WEIGHT_TABLE = "CREATE TABLE IF NOT EXISTS weightTab ( id integer AUTO INCREMENT PRIMARY KEY, weight integer, entered text)";
         final String CREATE_MEALS_TABLE = "CREATE TABLE IF NOT EXISTS meals ( id integer AUTO INCREMENT PRIMARY KEY, name TEXT, portions integer, calories integer, eaten text)";
         final String CREATE_EXCERCICES_TABLE = "CREATE TABLE IF NOT EXISTS excercices ( id integer AUTO INCREMENT PRIMARY KEY, name TEXT, duration integer, executed text, calories integer)";
 
+
         db.execSQL(CREATE_WEIGHT_TABLE);
         db.execSQL(CREATE_MEALS_TABLE);
         db.execSQL(CREATE_EXCERCICES_TABLE);
+        db.execSQL(CREATE_WEIGHT_TABLE_ACTUAL);
     }
 
     @Override
@@ -186,9 +190,9 @@ public class MySqlLiteHelper extends SQLiteOpenHelper {
 
     }
 
-    public HashMap<String, List<Long>> getBurnCaloriesForLastWeek() throws Exception{
+    public HashMap<String, Long> getBurnCaloriesForLastWeek() throws Exception{
 
-        HashMap<String, List<Long>> calories = new HashMap<String, List<Long>>();
+        HashMap<String, Long> calories = new HashMap<String, Long>();
 
         List<Date> dates = new ArrayList<Date>();
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -196,7 +200,7 @@ public class MySqlLiteHelper extends SQLiteOpenHelper {
         Date date = new Date();
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date());
-        cal.set(Calendar.DAY_OF_MONTH, cal.get(Calendar.DAY_OF_MONTH)-6);
+        cal.set(Calendar.DAY_OF_MONTH, cal.get(Calendar.DAY_OF_MONTH) - 6);
 
         String str_date = dateFormat.format(cal.getTime());
         String end_date = dateFormat.format(date);
@@ -206,8 +210,8 @@ public class MySqlLiteHelper extends SQLiteOpenHelper {
         formatter = new SimpleDateFormat("dd/MM/yyyy");
         Date  startDate = (Date)formatter.parse(str_date);
         Date  endDate = (Date)formatter.parse(end_date);
-        long interval = 24*1000 * 60 * 60; // 1 hour in millis
-        long endTime =endDate.getTime() ; // create your endtime here, possibly using Calendar or Date
+        long interval = 24*1000 * 60 * 60;
+        long endTime =endDate.getTime() ;
         long curTime = startDate.getTime();
         while (curTime <= endTime) {
             dates.add(new Date(curTime));
@@ -224,13 +228,43 @@ public class MySqlLiteHelper extends SQLiteOpenHelper {
             Date lDate =(Date)dates.get(i);
             String ds = formatter.format(lDate);
             cursor = db.rawQuery(query, new String[]{ds});
-            List<Long> caloriesList = new ArrayList<Long>();
+            Long caloriesVal = 0l;
             do {
-                caloriesList.add(new Long(cursor.getString(0)));
+                caloriesVal += new Long(cursor.getString(0));
             } while(cursor.moveToNext());
-            calories.put(ds, caloriesList);
+            calories.put(ds, caloriesVal);
         }
 
         return calories;
+    }
+
+    public HistoryWeightModel getLastActualWeight() {
+        final String query = "SELECT weight, entered FROM " + TABLE_WEIGHT_ACTUAL + " ORDER BY id DESC LIMIT 1";
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        HistoryWeightModel model = new HistoryWeightModel();
+
+        Cursor cursor = db.rawQuery(query, null);
+        cursor.moveToFirst();
+        if (cursor.getCount() > 0) {
+            while (!cursor.isAfterLast()) {
+                model.setWeight(Long.getLong(cursor.getString(0)));
+                model.setEntered((cursor.getString(1)));
+                cursor.moveToNext();
+            }
+        }
+        cursor.close();
+        return model;
+    }
+
+    public void insertLastWeight(HistoryWeightModel model) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        values.put(KEY_WEIGHT, model.getWeight());
+        values.put(KEY_ENTERED, model.getEntered().toString());
+
+        db.insert(TABLE_WEIGHT_ACTUAL, null, values);
+        db.close();
     }
 }

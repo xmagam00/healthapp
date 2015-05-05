@@ -23,4 +23,12 @@ public class HistoryWeightDao {
     public void insertWeight(HistoryWeightModel model) {
         helper.insertWeight(model);
     }
+
+    public HistoryWeightModel getLastActualWeight(){
+        return helper.getLastActualWeight();
+    }
+
+    public void insertActualWeight(HistoryWeightModel model){
+        helper.insertLastWeight(model);
+    }
 }
