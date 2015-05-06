@@ -9,16 +9,17 @@ import android.view.MenuItem;
 import usw.app.martin.healthapp.R;
 import usw.app.martin.healthapp.customComponents.MyValueFormatter;
 import usw.app.martin.healthapp.dao.HistoryWeightDao;
-import usw.app.martin.healthapp.model.ExcerciseModel;
 import usw.app.martin.healthapp.model.HistoryWeightModel;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
+import java.util.concurrent.TimeUnit;
 
 import android.view.View;
 import android.widget.Button;
@@ -150,6 +151,9 @@ public class MainActivity extends ActionBarActivity  implements OnChartValueSele
                 HistoryWeightModel lastActualWeight = historyWeightDao.getLastActualWeight();
                 textViewActualWeight.setText( lastActualWeight.getWeight() + " kg");
 
+                //recalculate days
+                daysToTargetWeight(lastActualWeight, lastWeight);
+
                 Toast toast = Toast.makeText(MainActivity.this, "Inserted target weight and Actual weight", Toast.LENGTH_LONG);
                 toast.show();
 
@@ -168,8 +172,10 @@ public class MainActivity extends ActionBarActivity  implements OnChartValueSele
             previousWeightTextWeight.setText("");
         }
 
-    }
+        daysToTargetWeight(historyWeightDao.getLastActualWeight(),historyWeightDao.getLastWeight() );
 
+
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -217,40 +223,44 @@ public class MainActivity extends ActionBarActivity  implements OnChartValueSele
 
     }
     private void setData() {
-        HashMap<String,Long> caloriesPerWeek = new HashMap<String, Long>();
+        Map<Date,Long> caloriesPerWeek = null;
         ArrayList<String> xVals = new ArrayList<String>();
         ArrayList<BarEntry> yVals1 = new ArrayList<BarEntry>();
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
 
         try {
              caloriesPerWeek =  historyWeightDao.getBurnCaloriesForLastWeek();
+            int index = 0;
+            for (Map.Entry<Date, Long> entry : caloriesPerWeek.entrySet()) {
+                String key = format.format(entry.getKey()).toString().substring(0,2);
+
+
+                Long calories =  entry.getValue();
+
+
+
+
+               xVals.add(key);
+               yVals1.add(new BarEntry(calories,index));
+                index++;
+            }
+
+
+            BarDataSet set1 = new BarDataSet(yVals1, "Calories burn over last week");
+            set1.setBarSpacePercent(35f);
+
+            ArrayList<BarDataSet> dataSets = new ArrayList<BarDataSet>();
+            dataSets.add(set1);
+
+            BarData data = new BarData(xVals, dataSets);
+          //  data.setValueFormatter(new MyValueFormatter());
+            data.setValueTextSize(10f);
+
+            mChart.setData(data);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        for (Map.Entry<String, Long> entry : caloriesPerWeek.entrySet()) {
-            String key = entry.getKey().toString().substring(0,2);
-            char[] chars = new char[10];
-                    chars = key.toCharArray();
 
-            if (chars[1] == '/'){
-                key = key.substring(0,1);
-            }
-
-            Long calories =  entry.getValue();
-            xVals.add(key);
-            yVals1.add(new BarEntry(calories, new Integer(key)));
-        }
-
-        BarDataSet set1 = new BarDataSet(yVals1, "Calories burn over last week");
-        set1.setBarSpacePercent(35f);
-
-        ArrayList<BarDataSet> dataSets = new ArrayList<BarDataSet>();
-        dataSets.add(set1);
-
-        BarData data = new BarData(xVals, dataSets);
-        data.setValueFormatter(new MyValueFormatter());
-        data.setValueTextSize(10f);
-
-        mChart.setData(data);
     }
 
     SeekBar.OnSeekBarChangeListener  weightBar = new SeekBar.OnSeekBarChangeListener() {
@@ -289,6 +299,36 @@ public class MainActivity extends ActionBarActivity  implements OnChartValueSele
         }
 
     };
+
+    private void daysToTargetWeight(HistoryWeightModel actualWeight, HistoryWeightModel targetWeight){
+        SimpleDateFormat myFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+        final double averageDayCalories = 18369;
+        double weightDifferenceInGrams = (actualWeight.getWeight() - targetWeight.getWeight())*1000;
+
+        double caloriesToBurn = Math.round(weightDifferenceInGrams*9);
+
+        try {
+            Date date1 = myFormat.parse(actualWeight.getEntered().toString());
+            Date date2 = new Date();
+            Date date3 = myFormat.parse(myFormat.format(date2));
+            long diff = date3.getTime() - date1.getTime();
+            long daysDifference = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+
+            caloriesToBurn -= daysDifference*averageDayCalories;
+
+            long days = Math.round(caloriesToBurn/averageDayCalories);
+            textViewDays.setText((new Long(days)).toString());
+
+        } catch (ParseException e){
+            e.printStackTrace();
+        }
+
+
+
+
+
+    }
 
 
 }

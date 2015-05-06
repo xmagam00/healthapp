@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -14,6 +15,8 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import usw.app.martin.healthapp.model.ExcerciseModel;
 import usw.app.martin.healthapp.model.HistoryWeightModel;
@@ -203,9 +206,9 @@ public class MySqlLiteHelper extends SQLiteOpenHelper {
 
     }
 
-    public HashMap<String, Long> getBurnCaloriesForLastWeek() throws Exception {
+    public Map<Date, Long> getBurnCaloriesForLastWeek() throws ParseException {
 
-        HashMap<String, Long> calories = new HashMap<String, Long>();
+        Map<Date, Long> calories = new TreeMap<Date, Long>();
 
         List<Date> dates = new ArrayList<Date>();
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -221,8 +224,15 @@ public class MySqlLiteHelper extends SQLiteOpenHelper {
         DateFormat formatter;
 
         formatter = new SimpleDateFormat("d/M/yyyy");
-        Date startDate = (Date) formatter.parse(str_date);
-        Date endDate = (Date) formatter.parse(end_date);
+        DateFormat insertFormat = new SimpleDateFormat("dd/MM/yyyy");
+        Date startDate = null;
+        Date endDate = null;
+        try {
+            startDate = (Date) formatter.parse(str_date);
+            endDate= (Date) formatter.parse(end_date);
+        } catch (ParseException e){
+            e.printStackTrace();
+        }
         long interval = 24 * 1000 * 60 * 60;
         long endTime = endDate.getTime();
         long curTime = startDate.getTime();
@@ -240,20 +250,21 @@ public class MySqlLiteHelper extends SQLiteOpenHelper {
 
             Date lDate = (Date) dates.get(i);
             String ds = formatter.format(lDate);
+
             cursor = db.rawQuery(query, new String[]{ds});
             Long caloriesVal = new Long(0);
-
+            cursor.moveToNext();
             if (cursor.getCount() > 0) {
                 while (!cursor.isAfterLast()) {
                     caloriesVal += new Long(cursor.getString(0));
                     cursor.moveToNext();
                 }
-                calories.put(ds, caloriesVal);
-                caloriesVal = new Long(0);
             } else {
-                calories.put(ds, caloriesVal);
                 caloriesVal = new Long(0);
             }
+            calories.put(insertFormat.parse(insertFormat.format(lDate)), caloriesVal);
+
+            caloriesVal = new Long(0);
         }
 
         cursor.close();

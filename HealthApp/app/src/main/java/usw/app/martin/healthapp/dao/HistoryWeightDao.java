@@ -2,7 +2,9 @@ package usw.app.martin.healthapp.dao;
 
 import android.content.Context;
 
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 
 import usw.app.martin.healthapp.helper.MySqlLiteHelper;
 import usw.app.martin.healthapp.model.HistoryWeightModel;
@@ -34,7 +36,7 @@ public class HistoryWeightDao {
         helper.insertLastWeight(model);
     }
 
-    public HashMap<String,Long> getBurnCaloriesForLastWeek() throws Exception {
+    public Map<Date,Long> getBurnCaloriesForLastWeek() throws Exception {
         return helper.getBurnCaloriesForLastWeek();
     }
 }

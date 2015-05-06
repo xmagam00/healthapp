@@ -80,8 +80,6 @@ public class BmiActivity extends ActionBarActivity {
         String bmiResultText = "";
         String color = "";
 
-
-
         if (posSpinner == 1){
             weightResult = weight*0.45359237;
 
@@ -99,7 +97,14 @@ public class BmiActivity extends ActionBarActivity {
         if (Double.compare(heightResult, 0.0) != 0) {
             bmiResult = weight / Math.pow(heightResult, 2.0);
         }
+        bmiResult -= 0.4246*ageSeekValue;
+        if (bmiResult < 0){
+            bmiResult = 0;
+        }
+
         bmiResult = Math.round(bmiResult * 100.0)/100.0;
+
+
 
         if (bmiResult < 15.0){
             bmiResultText = "Very severely underweight";
