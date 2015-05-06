@@ -6,6 +6,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="usw.app.martin.healthapp.activity.BmiActivity"
+    android:background="#ffffffff"
     >
 
     <TextView
@@ -16,7 +17,9 @@
         android:id="@+id/textViewWeight"
         android:layout_marginTop="85dp"
         android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:textStyle="bold"
+        android:textColor="#ff000000" />
 
     <SeekBar
         android:layout_width="wrap_content"
@@ -63,7 +66,9 @@
         android:text="Centimeters"
         android:id="@+id/textViewHeightUpper2"
         android:layout_above="@+id/seekBarHeightUp"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignParentStart="true"
+        android:textStyle="bold"
+        android:textColor="#ff000000" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -71,8 +76,10 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Inches"
         android:id="@+id/textViewHeightBottom"
-        android:layout_below="@+id/textViewHeightUpper"
-        android:layout_toEndOf="@+id/textViewHeightUpper" />
+        android:textStyle="bold"
+        android:layout_alignBottom="@+id/textViewHeight"
+        android:layout_alignParentStart="true"
+        android:textColor="#ff000000" />
 
     <SeekBar
         android:layout_width="wrap_content"
@@ -90,8 +97,11 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Result:"
         android:id="@+id/textViewResult"
-        android:layout_above="@+id/textViewResultValue"
-        android:layout_centerHorizontal="true" />
+        android:textStyle="bold"
+        android:textColor="#ff000000"
+        android:layout_below="@+id/textViewHeightUpper"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="70dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -100,7 +110,9 @@
         android:text="Value:"
         android:id="@+id/textViewValue"
         android:layout_below="@+id/seekBarWeight"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:textStyle="bold"
+        android:textColor="#ff000000" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -109,7 +121,7 @@
         android:text="0"
         android:id="@+id/textViewWeightText"
         android:layout_below="@+id/seekBarWeight"
-        android:layout_toStartOf="@+id/textViewHeightUpper2" />
+        android:layout_toEndOf="@+id/textViewHeightUpper" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -118,7 +130,9 @@
         android:text="Value:"
         android:id="@+id/textView7"
         android:layout_below="@+id/seekBarHeightUp"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:textStyle="bold"
+        android:textColor="#ff000000" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -127,7 +141,7 @@
         android:text="0"
         android:id="@+id/textViewHeightUpper"
         android:layout_below="@+id/seekBarHeightUp"
-        android:layout_toStartOf="@+id/textViewHeightUpper2" />
+        android:layout_toEndOf="@+id/textViewHeightUpper2" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -136,7 +150,9 @@
         android:text="Value:"
         android:id="@+id/textView8"
         android:layout_below="@+id/seekBarHeightBottom"
-        android:layout_alignStart="@+id/seekBarHeightBottom" />
+        android:layout_alignStart="@+id/seekBarHeightBottom"
+        android:textStyle="bold"
+        android:textColor="#ff000000" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -145,7 +161,7 @@
         android:text="0"
         android:id="@+id/textViewHeightDown"
         android:layout_alignTop="@+id/textView8"
-        android:layout_toStartOf="@+id/textViewHeightBottom" />
+        android:layout_alignStart="@+id/textViewHeightUpper" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -163,7 +179,9 @@
         android:text="Age"
         android:id="@+id/textView9"
         android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:textStyle="bold"
+        android:textColor="#ff000000" />
 
     <SeekBar
         android:layout_width="wrap_content"
@@ -181,8 +199,10 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Value:"
         android:id="@+id/textView10"
+        android:textStyle="bold"
         android:layout_below="@+id/seekBarAge"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:textColor="#ff000000" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -197,10 +217,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="0"
         android:id="@+id/textViewResultValue"
-        android:layout_above="@+id/textView13"
-        android:layout_alignEnd="@+id/textViewHeightUpper2" />
+        android:layout_below="@+id/textViewResult"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="16dp"
+        android:layout_alignStart="@+id/textViewResult" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -208,8 +229,11 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="BMI Index:"
         android:id="@+id/textView11"
-        android:layout_below="@+id/textViewResult"
-        android:layout_alignParentStart="true" />
+        android:textStyle="bold"
+        android:layout_alignBaseline="@+id/textViewResultValue"
+        android:layout_alignBottom="@+id/textViewResultValue"
+        android:layout_alignParentStart="true"
+        android:textColor="#ff000000" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -217,9 +241,11 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Category:"
         android:id="@+id/textView12"
-        android:layout_alignBaseline="@+id/textViewResultText"
-        android:layout_alignBottom="@+id/textViewResultText"
-        android:layout_alignStart="@+id/textView11" />
+        android:textStyle="bold"
+        android:layout_below="@+id/textView11"
+        android:textColor="#ff000000"
+        android:layout_alignEnd="@+id/textView11"
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -234,7 +260,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/spinner2"
-        android:layout_toEndOf="@+id/textViewHeightUpper2"
+        android:layout_toEndOf="@+id/textViewResult"
         android:layout_above="@+id/textViewHeightUpper2"
         android:layout_below="@+id/seekBarWeight"
         android:spinnerMode="dropdown" />
@@ -244,7 +270,8 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:id="@+id/textView13"
-        android:layout_alignTop="@+id/textViewResultText"
-        android:layout_alignStart="@+id/textViewResultValue" />
+        android:layout_below="@+id/textViewResultValue"
+        android:layout_alignStart="@+id/textViewResultValue"
+        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>

@@ -21,7 +21,7 @@ public class HelpActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_help);
 
-        btnCall = (Button)findViewById(R.id.btnCall);
+        btnCall = (Button) findViewById(R.id.btnCall);
 
         btnCall.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,15 +53,15 @@ public class HelpActivity extends ActionBarActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_bmi) {
             intent = new Intent(HelpActivity.this, BmiActivity.class);
-        } else if (id == R.id.action_meals){
+        } else if (id == R.id.action_meals) {
             intent = new Intent(HelpActivity.this, MealsActivity.class);
-        }  else if (id == R.id.action_help){
+        } else if (id == R.id.action_help) {
             intent = new Intent(HelpActivity.this, HelpActivity.class);
-        } else if (id == R.id.action_about){
+        } else if (id == R.id.action_about) {
             intent = new Intent(HelpActivity.this, AboutActivity.class);
-        } else if (id == R.id.action_overview){
+        } else if (id == R.id.action_overview) {
             intent = new Intent(HelpActivity.this, MainActivity.class);
-        } else if (id == R.id.action_excercises){
+        } else if (id == R.id.action_excercises) {
             intent = new Intent(HelpActivity.this, ExcerciseActivity.class);
         }
 

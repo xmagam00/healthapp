@@ -21,7 +21,7 @@ public class SplashScreenActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
 
-        progressBar = (ProgressBar)findViewById(R.id.progressBar);
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
         final Thread t = new Thread() {
 
             @Override
@@ -29,14 +29,12 @@ public class SplashScreenActivity extends Activity {
                 int jumpTime = 0;
                 while (jumpTime < totalProgressTime) {
                     try {
-                        Thread.sleep(10);
+                        Thread.sleep(100);
                         jumpTime += 5;
                         progressBar.setProgress(jumpTime);
                     } catch (InterruptedException e) {
-                        // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
-
                 }
 
                 Intent i = new Intent(SplashScreenActivity.this, MainActivity.class);
@@ -46,9 +44,6 @@ public class SplashScreenActivity extends Activity {
         };
         t.start();
     }
-
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -68,7 +63,6 @@ public class SplashScreenActivity extends Activity {
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 }

@@ -31,7 +31,7 @@ import java.util.Map;
 import usw.app.martin.healthapp.customComponents.ExpandableListAdapter;
 import usw.app.martin.healthapp.dao.ExcerciseDao;
 import usw.app.martin.healthapp.model.ExcerciseModel;
-import usw.app.martin.healthapp.model.MealModel;
+
 
 public class ExcerciseActivity extends ActionBarActivity {
 
@@ -66,7 +66,7 @@ public class ExcerciseActivity extends ActionBarActivity {
 
         // setting list adapter
         expListView.setAdapter(listAdapter);
-        expListView.setBackgroundColor(Color.BLUE);
+
         // Listview Group click listener
         expListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
 

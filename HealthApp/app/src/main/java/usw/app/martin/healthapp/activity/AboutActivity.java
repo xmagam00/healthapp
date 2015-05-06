@@ -36,15 +36,15 @@ public class AboutActivity extends ActionBarActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_bmi) {
             intent = new Intent(AboutActivity.this, BmiActivity.class);
-        } else if (id == R.id.action_meals){
+        } else if (id == R.id.action_meals) {
             intent = new Intent(AboutActivity.this, MealsActivity.class);
-        }  else if (id == R.id.action_help){
+        } else if (id == R.id.action_help) {
             intent = new Intent(AboutActivity.this, HelpActivity.class);
-        } else if (id == R.id.action_about){
+        } else if (id == R.id.action_about) {
             intent = new Intent(AboutActivity.this, AboutActivity.class);
-        } else if (id == R.id.action_overview){
+        } else if (id == R.id.action_overview) {
             intent = new Intent(AboutActivity.this, MainActivity.class);
-        } else if (id == R.id.action_excercises){
+        } else if (id == R.id.action_excercises) {
             intent = new Intent(AboutActivity.this, ExcerciseActivity.class);
         }
 

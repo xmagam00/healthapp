@@ -50,7 +50,7 @@ public class MealsActivity extends ActionBarActivity {
     private int mYear, mMonth, mDay;
     private MealDao mealDao;
     private EditText portions;
-    private Button btnSave,btnSetDate;
+    private Button btnSave, btnSetDate;
     private TextView textViewDate;
 
 
@@ -73,7 +73,7 @@ public class MealsActivity extends ActionBarActivity {
 
         // setting list adapter
         expListView.setAdapter(listAdapter);
-        expListView.setBackgroundColor(Color.BLUE);
+
         // Listview Group click listener
         expListView.setOnGroupClickListener(new OnGroupClickListener() {
 
@@ -130,9 +130,9 @@ public class MealsActivity extends ActionBarActivity {
         });
     }
 
-    private void initializeVariables(){
+    private void initializeVariables() {
 
-        mealsSpinner = (Spinner)findViewById(R.id.spinnerMeals);
+        mealsSpinner = (Spinner) findViewById(R.id.spinnerMeals);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, new String[]{"Rice", "Pasta", "Meat", "Fish",
@@ -151,27 +151,27 @@ public class MealsActivity extends ActionBarActivity {
                 });
 
 
-        portions = (EditText)findViewById(R.id.editTextPortions);
-        textViewDate = (TextView)findViewById(R.id.textViewDate2);
+        portions = (EditText) findViewById(R.id.editTextPortions);
+        textViewDate = (TextView) findViewById(R.id.textViewDate2);
 
-        btnSave = (Button)findViewById(R.id.btnSaveMeal);
-        btnSetDate = (Button)findViewById(R.id.btnSaveDateMeal);
+        btnSave = (Button) findViewById(R.id.btnSaveMeal);
+        btnSetDate = (Button) findViewById(R.id.btnSaveDateMeal);
 
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View w){
+            public void onClick(View w) {
                 if (portions.getText().length() <= 0) {
                     Toast.makeText(MealsActivity.this, "Error: Enter portion", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (textViewDate.getText().toString().length() <= 0){
+                if (textViewDate.getText().toString().length() <= 0) {
                     Toast.makeText(MealsActivity.this, "Error: Set date of eating", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 Date date = new Date();
                 Date enteredDate = new Date(textViewDate.getText().toString());
 
-                if (enteredDate.after(date)){
+                if (enteredDate.after(date)) {
                     Toast.makeText(MealsActivity.this, "Error: Entered date is in the future", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -182,23 +182,23 @@ public class MealsActivity extends ActionBarActivity {
                 if (mealsSpinnerPos == 0) {
                     calories = 200l;
 
-                } else if (mealsSpinnerPos == 1){
+                } else if (mealsSpinnerPos == 1) {
                     calories = 200l;
-                } else if (mealsSpinnerPos == 2){
+                } else if (mealsSpinnerPos == 2) {
                     calories = 160l;
-                } else if (mealsSpinnerPos == 3){
+                } else if (mealsSpinnerPos == 3) {
                     calories = 160l;
-                } else if (mealsSpinnerPos == 4){
+                } else if (mealsSpinnerPos == 4) {
                     calories = 150l;
-                } else if (mealsSpinnerPos == 5){
+                } else if (mealsSpinnerPos == 5) {
                     calories = 120l;
-                } else if (mealsSpinnerPos == 6){
+                } else if (mealsSpinnerPos == 6) {
                     calories = 100l;
-                } else if (mealsSpinnerPos == 7){
+                } else if (mealsSpinnerPos == 7) {
                     calories = 100l;
-                } else if (mealsSpinnerPos == 8){
+                } else if (mealsSpinnerPos == 8) {
                     calories = 100l;
-                } else if (mealsSpinnerPos == 9){
+                } else if (mealsSpinnerPos == 9) {
                     calories = 30l;
                 }
 
@@ -215,7 +215,7 @@ public class MealsActivity extends ActionBarActivity {
                 listAdapter = new ExpandableListAdapter(getApplicationContext(), listDataHeader, listDataChild);
                 // setting list adapter
                 expListView.setAdapter(listAdapter);
-                expListView.setBackgroundColor(Color.BLUE);
+
                 //expListView.invalidate();
                 Toast.makeText(MealsActivity.this, "You have eaten " + calories.toString() + " calories", Toast.LENGTH_LONG).show();
             }
@@ -265,15 +265,15 @@ public class MealsActivity extends ActionBarActivity {
 
         if (id == R.id.action_bmi) {
             intent = new Intent(MealsActivity.this, BmiActivity.class);
-        } else if (id == R.id.action_meals){
+        } else if (id == R.id.action_meals) {
             intent = new Intent(MealsActivity.this, MealsActivity.class);
-        }  else if (id == R.id.action_help){
+        } else if (id == R.id.action_help) {
             intent = new Intent(MealsActivity.this, HelpActivity.class);
-        } else if (id == R.id.action_about){
+        } else if (id == R.id.action_about) {
             intent = new Intent(MealsActivity.this, AboutActivity.class);
-        } else if (id == R.id.action_overview){
+        } else if (id == R.id.action_overview) {
             intent = new Intent(MealsActivity.this, MainActivity.class);
-        } else if (id == R.id.action_excercises){
+        } else if (id == R.id.action_excercises) {
             intent = new Intent(MealsActivity.this, ExcerciseActivity.class);
         }
 
@@ -286,7 +286,7 @@ public class MealsActivity extends ActionBarActivity {
     }
 
     private void prepareListData() {
-        HashMap<String,List<MealModel>> meals = mealDao.getAllMeals();
+        HashMap<String, List<MealModel>> meals = mealDao.getAllMeals();
         listDataHeader = new ArrayList<String>();
         listDataChild = new HashMap<String, List<String>>();
 
@@ -294,7 +294,7 @@ public class MealsActivity extends ActionBarActivity {
             String key = entry.getKey();
             List<String> tmpList = new ArrayList<String>();
             List<MealModel> value = entry.getValue();
-            for (MealModel model : value){
+            for (MealModel model : value) {
                 tmpList.add("" + model.getName() + " Portion(s): " + model.getPortions() + " " + model.getPortions() + "cal(s)");
             }
             listDataHeader.add(key);
