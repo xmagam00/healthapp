@@ -15,16 +15,19 @@ import usw.app.martin.healthapp.model.MealModel;
  */
 public class ExcerciseDao {
 
+    //instance of mysqlhelper
     private MySqlLiteHelper helper;
 
     public ExcerciseDao(Context context){
         helper = new MySqlLiteHelper(context);
     }
 
+    //method for getting all excercises
     public HashMap<String, List<ExcerciseModel>> getAllExcercises(){
         return helper.getAllExcercises();
     }
 
+    //method for inserting excercise
     public void insertExcercise(ExcerciseModel model){
         helper.insertExcercise(model);
     }

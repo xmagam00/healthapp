@@ -21,6 +21,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -61,9 +64,7 @@ public class ExcerciseActivity extends ActionBarActivity {
 
         // preparing list data
         prepareListData();
-
         listAdapter = new ExpandableListAdapter(this, listDataHeader, listDataChild);
-
         // setting list adapter
         expListView.setAdapter(listAdapter);
 
@@ -73,21 +74,14 @@ public class ExcerciseActivity extends ActionBarActivity {
             @Override
             public boolean onGroupClick(ExpandableListView parent, View v,
                                         int groupPosition, long id) {
-                // Toast.makeText(getApplicationContext(),
-                // "Group Clicked " + listDataHeader.get(groupPosition),
-                // Toast.LENGTH_SHORT).show();
                 return false;
             }
         });
 
         // Listview Group expanded listener
         expListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
-
             @Override
             public void onGroupExpand(int groupPosition) {
-                Toast.makeText(getApplicationContext(),
-                        listDataHeader.get(groupPosition) + " Expanded",
-                        Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -96,10 +90,6 @@ public class ExcerciseActivity extends ActionBarActivity {
 
             @Override
             public void onGroupCollapse(int groupPosition) {
-                Toast.makeText(getApplicationContext(),
-                        listDataHeader.get(groupPosition) + " Collapsed",
-                        Toast.LENGTH_SHORT).show();
-
             }
         });
 
@@ -121,23 +111,22 @@ public class ExcerciseActivity extends ActionBarActivity {
                 return false;
             }
         });
-
-
     }
 
+    //method for wiring ui components with activity
     private void initializeVariables() {
 
         editTextMinutes = (EditText) findViewById(R.id.editTextMinutes);
-
         textViewDate = (TextView) findViewById(R.id.textViewDate2);
         exerciseSpinner = (Spinner) findViewById(R.id.spinnerExcercices);
 
+        //set exercies spinner with values
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, new String[]{"Jogging", "Stretching", "Elliptical trainer", "Circuit training - cross fit",
                 "Bowling", "Zumba", "Ski machine", "Pushups", "Rope jumping"});
         exerciseSpinner.setAdapter(adapter);
 
-
+        //set value change listener for excercise spinner
         exerciseSpinner.setOnItemSelectedListener(
                 new AdapterView.OnItemSelectedListener() {
                     public void onItemSelected(
@@ -149,24 +138,35 @@ public class ExcerciseActivity extends ActionBarActivity {
                     }
                 });
 
-
+        //wire buttons
         btnSave = (Button) findViewById(R.id.btnSaveMeal);
         btnDate = (Button) findViewById(R.id.btnDate);
 
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View w) {
+                //check entered value
                 if (editTextMinutes.getText().length() <= 0) {
                     Toast.makeText(ExcerciseActivity.this, "Error: Enter duration", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (editTextMinutes.getText().toString().equals("0")){
+                    Toast.makeText(ExcerciseActivity.this, "Error: Enter correct minutes", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (textViewDate.getText().toString().length() <= 0) {
                     Toast.makeText(ExcerciseActivity.this, "Error: Set date of excercise", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
                 Date date = new Date();
-                Date enteredDate = new Date(textViewDate.getText().toString());
-                if (enteredDate.after(date)){
+                Date enteredDate = null;
+                try {
+                    enteredDate = (format.parse(textViewDate.getText().toString()));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                if (enteredDate.after(date)) {
                     Toast.makeText(ExcerciseActivity.this, "Error: Entered date is in the future", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -174,9 +174,9 @@ public class ExcerciseActivity extends ActionBarActivity {
                 Long minutes = new Long(editTextMinutes.getText().toString());
                 Long calories = null;
 
+                //set calories according to excercise
                 if (exerciseSpinnerPos == 0) {
                     calories = 4l;
-
                 } else if (exerciseSpinnerPos == 1) {
                     calories = 2l;
                 } else if (exerciseSpinnerPos == 2) {
@@ -195,15 +195,19 @@ public class ExcerciseActivity extends ActionBarActivity {
                     calories = 6l;
                 }
 
+                //calculate calories
                 calories *= minutes;
 
+                //create new model of excercise and save it
                 ExcerciseModel model = new ExcerciseModel();
                 model.setName(exerciseSpinner.getSelectedItem().toString());
                 model.setDuration(minutes);
                 model.setCalories(calories);
                 model.setExecuted(textViewDate.getText().toString());
+
                 exerciseDao.insertExcercise(model);
 
+                //redraw data in expandable list view
                 prepareListData();
                 listAdapter = new ExpandableListAdapter(getApplicationContext(), listDataHeader, listDataChild);
                 // setting list adapter
@@ -221,7 +225,7 @@ public class ExcerciseActivity extends ActionBarActivity {
                 mMonth = c.get(Calendar.MONTH);
                 mDay = c.get(Calendar.DAY_OF_MONTH);
 
-                // Launch Date Picker Dialog
+                //create new dialog window
                 DatePickerDialog dpd = new DatePickerDialog(ExcerciseActivity.this,
                         new DatePickerDialog.OnDateSetListener() {
 
@@ -229,8 +233,25 @@ public class ExcerciseActivity extends ActionBarActivity {
                             public void onDateSet(DatePicker view, int year,
                                                   int monthOfYear, int dayOfMonth) {
                                 // Display Selected date in textbox
-                                textViewDate.setText(dayOfMonth + "/"
-                                        + (monthOfYear + 1) + "/" + year);
+                                String tmp = (new Integer(dayOfMonth)).toString();
+                                String resultString = "";
+                                if (tmp.length() == 1){
+                                    resultString += "0";
+                                    resultString += tmp;
+                                } else {
+                                    resultString += tmp;
+                                }
+                                resultString += "/";
+                                tmp = (new Integer(monthOfYear+1)).toString();
+                                if (tmp.length() == 1){
+                                    resultString += "0";
+                                    resultString += tmp;
+                                } else {
+                                    resultString += tmp;
+                                }
+                                resultString += "/";
+                                resultString += year;
+                                textViewDate.setText(resultString);
 
 
                             }
@@ -239,7 +260,6 @@ public class ExcerciseActivity extends ActionBarActivity {
             }
         });
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -267,6 +287,7 @@ public class ExcerciseActivity extends ActionBarActivity {
             intent = new Intent(ExcerciseActivity.this, ExcerciseActivity.class);
         }
 
+        //start new activity
         if (intent != null) {
             startActivity(intent);
             finish();
@@ -275,17 +296,19 @@ public class ExcerciseActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    //method which set data from exercise to expanadable listview
     private void prepareListData() {
-        HashMap<String,List<ExcerciseModel>> excercises = exerciseDao.getAllExcercises();
+        HashMap<String, List<ExcerciseModel>> excercises = exerciseDao.getAllExcercises();
         listDataHeader = new ArrayList<String>();
         listDataChild = new HashMap<String, List<String>>();
 
+        //iterate over results
         for (Map.Entry<String, List<ExcerciseModel>> entry : excercises.entrySet()) {
             String key = entry.getKey();
             List<String> tmpList = new ArrayList<String>();
             List<ExcerciseModel> value = entry.getValue();
-            for (ExcerciseModel model : value){
-                tmpList.add("" + model.getName() + " Minute(s): " + model.getDuration() + " " + model.getCalories() + "cal(s)");
+            for (ExcerciseModel model : value) {
+                tmpList.add("" + model.getName() + " Minute(s): " + model.getDuration() + " Cal(s): " + model.getCalories());
             }
             listDataHeader.add(key);
             listDataChild.put(key, tmpList);

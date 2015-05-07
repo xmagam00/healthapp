@@ -1,9 +1,7 @@
 package usw.app.martin.healthapp.activity;
 
-import android.app.ActionBar;
+
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -49,7 +47,7 @@ public class MainActivity extends ActionBarActivity implements OnChartValueSelec
 
     protected BarChart mChart;
     private SeekBar weightSeekBar, actualWeightSeekbar;
-    private TextView weightSeekValueTextView, previousWeightTextWeight, textViewActual, textViewActualWeight, textViewDays;
+    private TextView weightSeekValueTextView, previousWeightTextWeight, textViewActual, textViewActualWeight, textViewDays, textViewInsertWeight;
     private long weightSeekValue, weightSeekValueActual;
     private HistoryWeightDao historyWeightDao;
     private Button btnSaveWeight;
@@ -58,77 +56,72 @@ public class MainActivity extends ActionBarActivity implements OnChartValueSelec
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
         setContentView(R.layout.activity_main);
 
-
-
+        //set context to dao
         historyWeightDao = new HistoryWeightDao(this);
-        textViewActual = (TextView) findViewById(R.id.textViewActual);
 
+        //initialize all variables
+        initializeVariables();
+    }
+
+    //wire and set all methods from ui to activity
+    private void initializeVariables(){
+        //set textviews
+        textViewActual = (TextView) findViewById(R.id.textViewActual);
         textViewActualWeight = (TextView) findViewById(R.id.textViewActualW);
         textViewDays = (TextView) findViewById(R.id.textViewDays);
-
         previousWeightTextWeight = (TextView) findViewById(R.id.previousWeightTextWeight);
-
         weightSeekValueTextView = (TextView) findViewById(R.id.weightMaintextView);
+        textViewInsertWeight = (TextView) findViewById(R.id.textView28);
 
+        //wire button
         btnSaveWeight = (Button) findViewById(R.id.btnSaveMeal);
 
+        //wire seek bars
         weightSeekBar = (SeekBar) findViewById(R.id.seekBarWeightMain);
         weightSeekBar.setOnSeekBarChangeListener(weightBar);
-
         actualWeightSeekbar = (SeekBar) findViewById(R.id.seekBarActuaWeight);
         actualWeightSeekbar.setOnSeekBarChangeListener(actualWeight);
 
+        //wire chart
         mChart = (BarChart) findViewById(R.id.chart1);
         mChart.setOnChartValueSelectedListener(this);
-
         mChart.setDrawBarShadow(false);
         mChart.setDrawValueAboveBar(true);
-
         mChart.setDescription("");
-
         mChart.setMaxVisibleValueCount(60);
-
         mChart.setPinchZoom(false);
-
         mChart.setDrawGridBackground(false);
         XAxis xAxis = mChart.getXAxis();
         xAxis.setPosition(XAxisPosition.BOTTOM);
-
         xAxis.setDrawGridLines(false);
         xAxis.setSpaceBetweenLabels(2);
-
         ValueFormatter custom = new MyValueFormatter();
-
         YAxis leftAxis = mChart.getAxisLeft();
-        // leftAxis.setTypeface(mTf);
         leftAxis.setLabelCount(8);
         leftAxis.setValueFormatter(custom);
         leftAxis.setPosition(YAxisLabelPosition.OUTSIDE_CHART);
         leftAxis.setSpaceTop(15f);
-
         YAxis rightAxis = mChart.getAxisRight();
         rightAxis.setDrawGridLines(false);
-        //rightAxis.setTypeface(mTf);
         rightAxis.setLabelCount(8);
         rightAxis.setValueFormatter(custom);
         rightAxis.setSpaceTop(15f);
-
         Legend l = mChart.getLegend();
         l.setPosition(LegendPosition.BELOW_CHART_LEFT);
         l.setForm(LegendForm.SQUARE);
         l.setFormSize(9f);
         l.setTextSize(11f);
         l.setXEntrySpace(4f);
-
+        //set data to chart
         setData();
 
+        //set onclick listener to button
         btnSaveWeight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //check weight
                 if ((new Long(textViewActual.getText().toString())) <= (new Long(weightSeekValueTextView.getText().toString()))) {
                     Toast toast = Toast.makeText(MainActivity.this, "Target weight should be less than actual", Toast.LENGTH_LONG);
                     toast.show();
@@ -147,6 +140,7 @@ public class MainActivity extends ActionBarActivity implements OnChartValueSelec
                 modelActual.setEntered(dateFormat.format(date));
                 modelActual.setWeight(new Long(textViewActual.getText().toString()));
 
+                //insert actual and target weight
                 historyWeightDao.insertWeight(model);
                 historyWeightDao.insertActualWeight(modelActual);
 
@@ -155,18 +149,22 @@ public class MainActivity extends ActionBarActivity implements OnChartValueSelec
 
                 HistoryWeightModel lastActualWeight = historyWeightDao.getLastActualWeight();
                 textViewActualWeight.setText(lastActualWeight.getWeight() + " kg");
+                textViewInsertWeight.setText(lastActualWeight.getEntered().toString());
 
                 //recalculate days
                 daysToTargetWeight(lastActualWeight, lastWeight);
 
+                //show toast
                 Toast toast = Toast.makeText(MainActivity.this, "Inserted target weight and Actual weight", Toast.LENGTH_LONG);
                 toast.show();
 
             }
         });
 
+        //set previous target weight
         if (historyWeightDao.getLastActualWeight().getEntered() != null && historyWeightDao.getLastActualWeight().getEntered().length() > 0) {
             textViewActualWeight.setText(historyWeightDao.getLastActualWeight().getWeight() + " kg");
+            textViewInsertWeight.setText(historyWeightDao.getLastActualWeight().getEntered().toString());
         } else {
             textViewActualWeight.setText("");
         }
@@ -178,8 +176,6 @@ public class MainActivity extends ActionBarActivity implements OnChartValueSelec
         }
 
         daysToTargetWeight(historyWeightDao.getLastActualWeight(), historyWeightDao.getLastWeight());
-
-
     }
 
     @Override
@@ -191,12 +187,9 @@ public class MainActivity extends ActionBarActivity implements OnChartValueSelec
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         Intent intent = null;
-        //noinspection SimplifiableIfStatement
+
         if (id == R.id.action_bmi) {
             intent = new Intent(MainActivity.this, BmiActivity.class);
         } else if (id == R.id.action_meals) {
@@ -211,6 +204,7 @@ public class MainActivity extends ActionBarActivity implements OnChartValueSelec
             intent = new Intent(MainActivity.this, ExcerciseActivity.class);
         }
 
+        //start new activity
         if (intent != null) {
             startActivity(intent);
             finish();
@@ -229,6 +223,7 @@ public class MainActivity extends ActionBarActivity implements OnChartValueSelec
 
     }
 
+    //set data to chart for burnt calories over last week
     private void setData() {
         Map<Date, Long> caloriesPerWeek = null;
         ArrayList<String> xVals = new ArrayList<String>();
@@ -240,17 +235,11 @@ public class MainActivity extends ActionBarActivity implements OnChartValueSelec
             int index = 0;
             for (Map.Entry<Date, Long> entry : caloriesPerWeek.entrySet()) {
                 String key = format.format(entry.getKey()).toString().substring(0, 2);
-
-
                 Long calories = entry.getValue();
-
-
                 xVals.add(key);
                 yVals1.add(new BarEntry(calories, index));
                 index++;
             }
-
-
             BarDataSet set1 = new BarDataSet(yVals1, "Calories burn over last week");
             set1.setBarSpacePercent(35f);
 
@@ -258,16 +247,14 @@ public class MainActivity extends ActionBarActivity implements OnChartValueSelec
             dataSets.add(set1);
 
             BarData data = new BarData(xVals, dataSets);
-            //  data.setValueFormatter(new MyValueFormatter());
             data.setValueTextSize(10f);
-
             mChart.setData(data);
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
+    //seek bar change listener
     SeekBar.OnSeekBarChangeListener weightBar = new SeekBar.OnSeekBarChangeListener() {
         @Override
         public void onProgressChanged(SeekBar seekBar, int progresValue, boolean fromUser) {
@@ -286,9 +273,8 @@ public class MainActivity extends ActionBarActivity implements OnChartValueSelec
 
     };
 
+    //seek bar change listener
     SeekBar.OnSeekBarChangeListener actualWeight = new SeekBar.OnSeekBarChangeListener() {
-        int progress = 0;
-
         @Override
         public void onProgressChanged(SeekBar seekBar, int progresValue, boolean fromUser) {
             progresValue += 30;
@@ -306,32 +292,32 @@ public class MainActivity extends ActionBarActivity implements OnChartValueSelec
 
     };
 
+    //method for calculation days to target weight
     private void daysToTargetWeight(HistoryWeightModel actualWeight, HistoryWeightModel targetWeight) {
         SimpleDateFormat myFormat = new SimpleDateFormat("dd/MM/yyyy");
 
         final double averageDayCalories = 18369;
-        double weightDifferenceInGrams = (actualWeight.getWeight() - targetWeight.getWeight()) * 1000;
+        if (actualWeight.getWeight() != null && targetWeight.getWeight() != null) {
+            double weightDifferenceInGrams = (actualWeight.getWeight() - targetWeight.getWeight()) * 1000;
 
-        double caloriesToBurn = Math.round(weightDifferenceInGrams * 9);
+            //how many calories need to be burnt
+            double caloriesToBurn = Math.round(weightDifferenceInGrams * 9);
 
-        try {
-            Date date1 = myFormat.parse(actualWeight.getEntered().toString());
-            Date date2 = new Date();
-            Date date3 = myFormat.parse(myFormat.format(date2));
-            long diff = date3.getTime() - date1.getTime();
-            long daysDifference = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+            try {
+                Date date1 = myFormat.parse(actualWeight.getEntered().toString());
+                Date date2 = new Date();
+                Date date3 = myFormat.parse(myFormat.format(date2));
+                long diff = date3.getTime() - date1.getTime();
+                //days beetween set target weight and actual
+                long daysDifference = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
 
-            caloriesToBurn -= daysDifference * averageDayCalories;
+                caloriesToBurn -= daysDifference * averageDayCalories;
 
-            long days = Math.round(caloriesToBurn / averageDayCalories);
-            textViewDays.setText((new Long(days)).toString());
-
-        } catch (ParseException e) {
-            e.printStackTrace();
+                long days = Math.round(caloriesToBurn / averageDayCalories);
+                textViewDays.setText((new Long(days)).toString());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
-
-
     }
-
-
 }

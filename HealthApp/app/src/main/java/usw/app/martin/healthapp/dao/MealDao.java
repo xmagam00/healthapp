@@ -20,10 +20,12 @@ public class MealDao {
         helper = new MySqlLiteHelper(context);
     }
 
+    //method for get all meals
     public HashMap<String,List<MealModel>> getAllMeals(){
         return helper.getAllMeals();
     }
 
+    //method for insert meal
     public void insertMeal(MealModel model){
         helper.insertMeal(model);
     }

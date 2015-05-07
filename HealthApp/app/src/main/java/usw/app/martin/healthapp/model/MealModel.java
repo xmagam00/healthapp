@@ -4,6 +4,10 @@ package usw.app.martin.healthapp.model;
 /**
  * Created by Martin on 25. 04. 2015.
  */
+
+/**
+ * Class for meal
+ */
 public class MealModel {
 
     private String name;

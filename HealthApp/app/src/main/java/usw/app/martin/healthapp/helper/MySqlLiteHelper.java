@@ -25,10 +25,14 @@ import usw.app.martin.healthapp.model.MealModel;
 /**
  * Created by Martin on 25. 04. 2015.
  */
+
+/**
+ * Main class for DB handling
+ */
 public class MySqlLiteHelper extends SQLiteOpenHelper {
 
     //DB information
-    private static final String DB_NAME = "HDA.db";
+    private static final String DB_NAME = "HDBAAA.db";
     private static final int DB_VER = 1;
 
     //table definition
@@ -66,7 +70,7 @@ public class MySqlLiteHelper extends SQLiteOpenHelper {
         final String CREATE_MEALS_TABLE = "CREATE TABLE IF NOT EXISTS meals ( id integer AUTO INCREMENT PRIMARY KEY, name TEXT, portions integer, calories integer, eaten text)";
         final String CREATE_EXCERCICES_TABLE = "CREATE TABLE IF NOT EXISTS excercices ( id integer AUTO INCREMENT PRIMARY KEY, name TEXT, duration integer, executed text, calories integer)";
 
-
+        //create schema
         db.execSQL(CREATE_WEIGHT_TABLE);
         db.execSQL(CREATE_MEALS_TABLE);
         db.execSQL(CREATE_EXCERCICES_TABLE);
@@ -75,11 +79,9 @@ public class MySqlLiteHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        final String CREATE_WEIGHT_TABLE_ACTUAL = "CREATE TABLE IF NOT EXISTS " + TABLE_WEIGHT_ACTUAL + " ( id integer AUTO INCREMENT PRIMARY KEY, weight integer, entered text)";
-
-        db.execSQL(CREATE_WEIGHT_TABLE_ACTUAL);
     }
 
+    //method for getting all excercises
     public HashMap<String, List<ExcerciseModel>> getAllExcercises() {
 
         HashMap<String, List<ExcerciseModel>> excercices = new HashMap<String, List<ExcerciseModel>>();
@@ -114,6 +116,10 @@ public class MySqlLiteHelper extends SQLiteOpenHelper {
         return excercices;
     }
 
+    /**
+     * Method for inserting excercise
+     * @param model
+     */
     public void insertExcercise(ExcerciseModel model) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -126,6 +132,10 @@ public class MySqlLiteHelper extends SQLiteOpenHelper {
         db.close();
     }
 
+    /**
+     * Method for inserting weight
+     * @param model
+     */
     public void insertWeight(HistoryWeightModel model) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -136,6 +146,10 @@ public class MySqlLiteHelper extends SQLiteOpenHelper {
         db.close();
     }
 
+    /**
+     * Method return last targer weight
+     * @return
+     */
     public HistoryWeightModel getLastWeight() {
 
         final String query = "SELECT weight, entered FROM " + TABLE_WEIGHT + " ORDER BY id DESC LIMIT 1";
@@ -156,6 +170,10 @@ public class MySqlLiteHelper extends SQLiteOpenHelper {
         return model;
     }
 
+    /**
+     * Method returns all meals
+     * @return
+     */
     public HashMap<String, List<MealModel>> getAllMeals() {
 
         HashMap<String, List<MealModel>> meals = new HashMap<String, List<MealModel>>();
@@ -193,6 +211,10 @@ public class MySqlLiteHelper extends SQLiteOpenHelper {
         return meals;
     }
 
+    /**
+     * Method for inserting meal
+     * @param model
+     */
     public void insertMeal(MealModel model) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -206,6 +228,11 @@ public class MySqlLiteHelper extends SQLiteOpenHelper {
 
     }
 
+    /**
+     * Method for getting calories over last week
+     * @return
+     * @throws ParseException
+     */
     public Map<Date, Long> getBurnCaloriesForLastWeek() throws ParseException {
 
         Map<Date, Long> calories = new TreeMap<Date, Long>();
@@ -223,7 +250,7 @@ public class MySqlLiteHelper extends SQLiteOpenHelper {
 
         DateFormat formatter;
 
-        formatter = new SimpleDateFormat("d/M/yyyy");
+        formatter = new SimpleDateFormat("dd/MM/yyyy");
         DateFormat insertFormat = new SimpleDateFormat("dd/MM/yyyy");
         Date startDate = null;
         Date endDate = null;
@@ -271,6 +298,10 @@ public class MySqlLiteHelper extends SQLiteOpenHelper {
         return calories;
     }
 
+    /**
+     * Method returns last actual weight
+     * @return
+     */
     public HistoryWeightModel getLastActualWeight() {
         final String query = "SELECT weight, entered FROM " + TABLE_WEIGHT_ACTUAL + " ORDER BY id DESC LIMIT 1";
         SQLiteDatabase db = this.getReadableDatabase();
@@ -290,6 +321,10 @@ public class MySqlLiteHelper extends SQLiteOpenHelper {
         return model;
     }
 
+    /**
+     * Methods inserts last actual weight
+     * @param model
+     */
     public void insertLastWeight(HistoryWeightModel model) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();

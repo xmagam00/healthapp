@@ -20,10 +20,12 @@ public class HistoryWeightDao {
         helper = new MySqlLiteHelper(context);
     }
 
+    //method for get last target weight
     public HistoryWeightModel getLastWeight(){
         return helper.getLastWeight();
     }
 
+    //insert target weight
     public void insertWeight(HistoryWeightModel model) {
         helper.insertWeight(model);
     }
@@ -36,6 +38,7 @@ public class HistoryWeightDao {
         helper.insertLastWeight(model);
     }
 
+    //method for geting all burnt calories for last week
     public Map<Date,Long> getBurnCaloriesForLastWeek() throws Exception {
         return helper.getBurnCaloriesForLastWeek();
     }

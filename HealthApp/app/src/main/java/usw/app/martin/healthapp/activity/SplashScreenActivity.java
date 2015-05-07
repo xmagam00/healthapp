@@ -21,15 +21,19 @@ public class SplashScreenActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
 
+        //wire ui with activity
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
+
+        //create new thread for progress
         final Thread t = new Thread() {
 
             @Override
             public void run() {
                 int jumpTime = 0;
+
                 while (jumpTime < totalProgressTime) {
                     try {
-                        Thread.sleep(100);
+                        Thread.sleep(150);
                         jumpTime += 5;
                         progressBar.setProgress(jumpTime);
                     } catch (InterruptedException e) {
@@ -47,19 +51,15 @@ public class SplashScreenActivity extends Activity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
+
         getMenuInflater().inflate(R.menu.menu_splash_screen, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }

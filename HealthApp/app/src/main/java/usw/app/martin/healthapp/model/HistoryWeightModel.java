@@ -5,6 +5,10 @@ package usw.app.martin.healthapp.model;
 /**
  * Created by Martin on 25. 04. 2015.
  */
+
+/**
+ * Class for weight
+ */
 public class HistoryWeightModel {
 
     private Long weight;

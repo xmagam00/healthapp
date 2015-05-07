@@ -46,10 +46,11 @@
         android:layout_height="wrap_content"
         android:text="Set weight"
         android:id="@+id/btnSaveMeal"
-        android:layout_centerHorizontal="true"
         android:background="#66CCFF"
-        android:layout_below="@+id/previousWeightTextWeight"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:layout_below="@+id/textView28"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp" />
 
 
     <com.github.mikephil.charting.charts.BarChart
@@ -183,5 +184,25 @@
         android:layout_marginTop="12dp"
         android:layout_below="@+id/btnSaveMeal"
         android:layout_alignEnd="@+id/seekBarActuaWeight"
-        android:layout_alignStart="@+id/textViewActual" />
+        android:layout_toEndOf="@+id/textViewActual" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Date:"
+        android:id="@+id/textView27"
+        android:layout_below="@+id/textView23"
+        android:layout_alignParentStart="true"
+        android:textColor="#ff000000"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/textView28"
+        android:layout_alignBottom="@+id/textView27"
+        android:layout_toEndOf="@+id/textView19" />
+
 </RelativeLayout>

@@ -29,8 +29,8 @@ public class BmiActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bmi);
 
+        //wire all ui components with activity
         initializeVariables();
-
     }
 
 
@@ -43,12 +43,9 @@ public class BmiActivity extends ActionBarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         Intent intent = null;
-        //noinspection SimplifiableIfStatement
+
         if (id == R.id.action_bmi) {
             intent = new Intent(BmiActivity.this, BmiActivity.class);
         } else if (id == R.id.action_meals) {
@@ -63,6 +60,7 @@ public class BmiActivity extends ActionBarActivity {
             intent = new Intent(BmiActivity.this, ExcerciseActivity.class);
         }
 
+        //start new activity
         if (intent != null) {
             startActivity(intent);
             finish();
@@ -71,6 +69,7 @@ public class BmiActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    //method for BMI calculation
     private void calculateBmi(double age, double weight, double heightUp, double heightDown) {
 
 
@@ -94,17 +93,22 @@ public class BmiActivity extends ActionBarActivity {
             heightResult += heightDown * 0.0254;
         }
 
+        //calculate bmi
         if (Double.compare(heightResult, 0.0) != 0) {
             bmiResult = weight / Math.pow(heightResult, 2.0);
         }
+
+        //edit value of BMI according to age
         bmiResult -= 0.4246 * ageSeekValue;
+
         if (bmiResult < 0) {
             bmiResult = 0;
         }
 
+        //round bmi result
         bmiResult = Math.round(bmiResult * 100.0) / 100.0;
 
-
+        //find category
         if (bmiResult < 15.0) {
             bmiResultText = "Very severely underweight";
             color = "#FF0000";
@@ -131,12 +135,14 @@ public class BmiActivity extends ActionBarActivity {
             color = "#FF0000";
         }
 
+        //set result
         resultValueTextView.setText(Double.toString(bmiResult));
         resultTextTextView.setText(bmiResultText);
         resultTextTextView.setTextColor(Color.parseColor(color));
 
     }
 
+    //method for wire all ui components with activity
     private void initializeVariables() {
 
         //wire textviews
@@ -168,33 +174,37 @@ public class BmiActivity extends ActionBarActivity {
         heightDownTextView.setVisibility(View.GONE);
         heightBottomTextView.setVisibility(View.GONE);
 
+        //add units to weight
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, new String[]{"kg", "pounds"});
         weightSpinner.setAdapter(adapter);
 
+        //add units to height
         ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, new String[]{"cm", "feets, inches"});
         heightSpinner.setAdapter(adapter2);
 
-
+        //set change value listener to spinner
         weightSpinner.setOnItemSelectedListener(
                 new AdapterView.OnItemSelectedListener() {
                     public void onItemSelected(
                             AdapterView<?> parent, View view, int position, long id) {
                         posSpinner = position;
+                        //recalculate bmi on value change
                         calculateBmi(ageSeekValue, weightSeekValue, heightUpSeekValue, heightDownSeekValue);
-
                     }
 
                     public void onNothingSelected(AdapterView<?> parent) {
                     }
                 });
 
+        //set value change listener to height
         heightSpinner.setOnItemSelectedListener(
                 new AdapterView.OnItemSelectedListener() {
                     public void onItemSelected(
                             AdapterView<?> parent, View view, int position, long id) {
                         posSpinner2 = position;
+
                         if (posSpinner2 == 0) {
                             heightDownHeightSeekBar.setVisibility(View.GONE);
                             downTextTextView.setVisibility(View.GONE);
@@ -208,12 +218,16 @@ public class BmiActivity extends ActionBarActivity {
                             heightBottomTextView.setVisibility(View.VISIBLE);
                             upper2TextView.setText("Feets");
                         }
+
+                        //recalculate bmi
                         calculateBmi(ageSeekValue, weightSeekValue, heightUpSeekValue, heightDownSeekValue);
                     }
 
                     public void onNothingSelected(AdapterView<?> parent) {
                     }
                 });
+
+        //set value change listener to seek bars
         ageSeekBar.setOnSeekBarChangeListener(AgeBar);
         weightSeekBar.setOnSeekBarChangeListener(WeightBar);
         heightUpHeightSeekBar.setOnSeekBarChangeListener(HeightUpBar);
@@ -264,18 +278,13 @@ public class BmiActivity extends ActionBarActivity {
     };
 
     SeekBar.OnSeekBarChangeListener HeightUpBar = new SeekBar.OnSeekBarChangeListener() {
-        int progress = 0;
-
         @Override
         public void onProgressChanged(SeekBar seekBar, int progresValue, boolean fromUser) {
             heightUpSeekValue = progresValue;
             heightUpperTextView.setText(Double.toString(heightUpSeekValue));
             calculateBmi(ageSeekValue, weightSeekValue, heightUpSeekValue, heightDownSeekValue);
         }
-
-
         @Override
-
         public void onStartTrackingTouch(SeekBar seekBar) {
         }
 
@@ -285,9 +294,6 @@ public class BmiActivity extends ActionBarActivity {
     };
 
     SeekBar.OnSeekBarChangeListener HeightDownBar = new SeekBar.OnSeekBarChangeListener() {
-
-        int progress = 0;
-
         @Override
         public void onProgressChanged(SeekBar seekBar, int progresValue, boolean fromUser) {
             heightDownSeekValue = progresValue;
